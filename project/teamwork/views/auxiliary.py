@@ -4,7 +4,7 @@ import jwt
 
 from rest_framework.exceptions import AuthenticationFailed
 
-from project.teamwork.models import Employee
+from teamwork.models import Employee
 
 
 def auth_required(view_func):

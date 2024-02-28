@@ -6,9 +6,9 @@ from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.views import APIView
 
-from project.teamwork.models import Employee
-from project.teamwork.serializers import UserSerializer
-from project.teamwork.views.auxiliary import auth_required
+from teamwork.models import Employee
+from teamwork.serializers import UserSerializer
+from teamwork.views.auxiliary import auth_required
 
 
 class RegisterView(APIView):
@@ -31,6 +31,10 @@ class RegisterView(APIView):
                 "Errors": {"password": error_array}
             }
             return response
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
 
 
 class LoginView(APIView):
