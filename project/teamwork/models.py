@@ -3,7 +3,6 @@ from django.contrib.auth.hashers import make_password
 from django.db import models
 from django_softdelete.models import SoftDeleteModel
 
-
 __all__ = (
     "Employee",
     "Project",
@@ -45,12 +44,8 @@ class Employee(AbstractUser, SoftDeleteModel):  # для физического 
     Модель сотрудника
     """
 
-    first_name = models.CharField(max_length=128, verbose_name="Имя")
-    second_name = models.CharField(max_length=128, verbose_name="Фамилия")
-    fam_name = models.CharField(max_length=128, null=True, blank=True, verbose_name="Отчество")
     email = models.EmailField(max_length=128, unique=True, verbose_name="Email")
     password = models.CharField(max_length=128, verbose_name="Пароль")
-    is_manager = models.BooleanField(default=False, verbose_name="Менеджер")
     post = models.CharField(max_length=128, choices=POSITION_CHOICES, verbose_name="Должность")
     username = None
 
