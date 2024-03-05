@@ -1,9 +1,7 @@
 from functools import wraps
-
 import jwt
 
 from rest_framework.exceptions import AuthenticationFailed
-
 from teamwork.models import Employee
 
 

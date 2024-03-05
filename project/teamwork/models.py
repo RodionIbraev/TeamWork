@@ -53,7 +53,7 @@ class Employee(AbstractUser, SoftDeleteModel):  # для физического 
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return f"{self.first_name} {self.second_name}"
+        return f"{self.first_name} {self.last_name}"
 
     class Meta:
         verbose_name = "Сотрудники"
