@@ -30,11 +30,11 @@ class ProjectView(APIView):  # автовыбор создателя на фро
         """
         user = get_user(request)
         if project_id:
-            project = Project.objects.get(id=project_id)
-            print(project)
+            try:
+                project = Project.objects.get(id=project_id)
+            except Project.DoesNotExist:
+                return Response(status=404, data={"message": f"Проект с id {project_id} не найден!"})
             project_serializer = self.serializer_class(project)
-            if not project:
-                return Response(status=404, data={"message": "Проект с id {} не найден.".format(project_id)})
             return Response(project_serializer.data)
         else:
             projects = Project.objects.filter(employee=user)
