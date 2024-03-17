@@ -102,6 +102,10 @@ class Task(SoftDeleteModel):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def get_user_tasks(user):
+        return Task.objects.filter(executor=user)
+
     class Meta:
         verbose_name = "Задача"
         verbose_name_plural = "Задачи"

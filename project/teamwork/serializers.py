@@ -24,16 +24,23 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ["id", "name", "description", "employee", "creator", "tasks"]
+        fields = ["id", "name", "description", "employee", "creator", "tasks", "created_at"]
+        extra_kwargs = {
+            "created_at": {"read_only": True}
+        }
 
     @staticmethod
-    def get_tasks(obj):
-        return Task.objects.filter(project=obj.id).values()
+    def get_tasks(project):
+        return Task.objects.filter(project=project.id).values()
 
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = [
-            "id", "name", "description", "deadline", "priority", "category", "executor", "status", "project", "creator"
+            "id", "name", "description", "deadline", "priority", "category", "executor", "status", "project",
+            "creator", "created_at"
         ]
+        extra_kwargs = {
+            "created_at": {"read_only": True}
+        }
