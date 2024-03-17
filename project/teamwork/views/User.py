@@ -13,7 +13,7 @@ from teamwork.views.auxiliary import auth_required
 
 class RegisterView(APIView):
     """
-    Регистрация пользователей
+    Регистрация пользователя
     """
 
     def post(self, request):
@@ -39,7 +39,7 @@ class RegisterView(APIView):
 
 class LoginView(APIView):
     """
-    Аутентификация пользователей
+    Аутентификация пользователя
     """
 
     def post(self, request):
@@ -71,7 +71,7 @@ class LoginView(APIView):
 
 class LogoutView(APIView):
     """
-    Выход пользователей
+    Выход пользователя
     """
 
     @auth_required

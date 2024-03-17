@@ -92,7 +92,10 @@ class Task(SoftDeleteModel):
     deadline = models.DateTimeField(verbose_name="Дата окончания")
     priority = models.CharField(max_length=128, choices=PRIORITY_CHOICES, verbose_name="Приоритет")
     category = models.CharField(max_length=128, choices=CATEGORY_CHOICES, verbose_name="Тип задачи")
-    executor = models.ForeignKey(Employee, verbose_name="Исполнитель", on_delete=models.CASCADE)
+    creator = models.ForeignKey(Employee, verbose_name="Создатель задачи", related_name="task_creator",
+                                on_delete=models.CASCADE)
+    executor = models.ForeignKey(Employee, verbose_name="Исполнитель", related_name="task_executor",
+                                 on_delete=models.CASCADE)
     status = models.CharField(max_length=128, choices=STATUS_CHOICES, verbose_name="Статус задачи")
     project = models.ForeignKey(Project, verbose_name="Проект", on_delete=models.CASCADE)
 
