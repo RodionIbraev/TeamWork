@@ -7,7 +7,7 @@ from teamwork.views.auxiliary import get_user, auth_required
 from teamwork.models import Project, Task
 
 
-class ProjectCreateView(APIView):
+class ProjectCreateView(APIView):  # автодобавление создателя
     """
     Создание проекта
     """
@@ -23,11 +23,11 @@ class ProjectCreateView(APIView):
 
 
 class ProjectView(APIView):
+    """
+    Просмотр проекта
+    """
     @auth_required
     def get(self, request, project_id=None):
-        """
-        Просмотр проекта
-        """
         user = get_user(request)
         if project_id:
             project = Project.objects.get(id=project_id)
