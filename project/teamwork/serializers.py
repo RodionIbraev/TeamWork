@@ -5,9 +5,10 @@ from .models import Employee, Project, Task
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
-        fields = ["id", "first_name", "last_name", "email", "password", "post"]
+        fields = ["id", "first_name", "last_name", "email", "password", "post", "date_joined"]
         extra_kwargs = {
-            "password": {"write_only": True}
+            "password": {"write_only": True},
+            "date_joined": {"read_only": True}
         }
 
     def create(self, validated_data):

@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 
 from teamwork.models import Employee
 from teamwork.serializers import UserSerializer
-from teamwork.views.auxiliary import auth_required
+from teamwork.views.auxiliary import auth_required, get_user
 
 
 class RegisterView(APIView):
@@ -83,3 +83,15 @@ class LogoutView(APIView):
         }
 
         return response
+
+
+class UserProfile(APIView):
+    """
+    Профиль пользователя
+    """
+
+    @auth_required
+    def get(self, request):
+        user = get_user(request)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
