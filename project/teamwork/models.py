@@ -129,3 +129,23 @@ class Comment(SoftDeleteModel):
         verbose_name = "Комментарий"
         verbose_name_plural = "Комментарии"
         ordering = ("task",)
+
+
+class EventScheduler(SoftDeleteModel):
+    """
+    Модель календаря событий
+    """
+
+    employee = models.ForeignKey(Employee, verbose_name="Автор события", on_delete=models.CASCADE)
+    time_begin = models.DateTimeField(verbose_name="Дата начала события")
+    time_end = models.DateTimeField(verbose_name="Дата окончания события")
+    name = models.CharField(max_length=200, verbose_name="Название")
+    created_at = models.DateTimeField(auto_now=True, verbose_name="Дата создания")
+
+    def __str__(self):
+        return f"{self.employee} событие: {self.name}"
+
+    class Meta:
+        verbose_name = "Календарь событий"
+        verbose_name_plural = "Календарь событий"
+        ordering = ("employee",)
