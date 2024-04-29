@@ -7,7 +7,7 @@ from teamwork.views.auxiliary import get_user, auth_required
 from teamwork.models import Project, Task
 
 
-class ProjectView(APIView):  # автовыбор создателя на фронте
+class ProjectView(APIView):
     serializer_class = ProjectSerializer
 
     @auth_required

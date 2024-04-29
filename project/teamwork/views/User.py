@@ -15,7 +15,6 @@ class RegisterView(APIView):
     """
     Регистрация пользователя
     """
-
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         # Проверка пароля на сложность
@@ -41,7 +40,6 @@ class LoginView(APIView):
     """
     Аутентификация пользователя
     """
-
     def post(self, request):
         email = request.data["email"]
         password = request.data["password"]
@@ -73,7 +71,6 @@ class LogoutView(APIView):
     """
     Выход пользователя
     """
-
     @auth_required
     def get(self, request):
         response = Response()
@@ -89,7 +86,6 @@ class UserProfile(APIView):
     """
     Профиль пользователя
     """
-
     @auth_required
     def get(self, request):
         user = get_user(request)

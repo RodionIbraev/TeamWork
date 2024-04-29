@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.urls import path
 
-from .views import RegisterView, LoginView, LogoutView, TaskView, ProjectView, UserProfile
+from .views import RegisterView, LoginView, LogoutView, TaskView, ProjectView, UserProfile, EventSchedulerView
 
 urlpatterns = [
     path("register/", RegisterView.as_view(), name="register"),
@@ -24,10 +24,13 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(), name="logout"),
     path("user-profile", UserProfile.as_view(), name="profile"),
 
-    path("create-project/", ProjectView.as_view(), name="create-project"),
+    path("project/create", ProjectView.as_view(), name="create-project"),
     path("projects/", ProjectView.as_view(), name="view-projects"),
     path("project/<str:project_id>/", ProjectView.as_view(), name="view-board"),
 
     path("project/<str:project_id>/task-create/", TaskView.as_view(), name="task-create"),
     path("user-tasks/", TaskView.as_view(), name="user-tasks"),
+
+    path("event-scheduler/", EventSchedulerView.as_view(), name="event-scheduler"),
+    path("event-scheduler/create", EventSchedulerView.as_view(), name="event-scheduler-create"),
 ]

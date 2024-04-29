@@ -1,5 +1,4 @@
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.hashers import make_password
 from django.db import models
 from django_softdelete.models import SoftDeleteModel
 
@@ -8,6 +7,7 @@ __all__ = (
     "Project",
     "Task",
     "Comment",
+    "EventScheduler"
 )
 POSITION_CHOICES = (
     ("JR", "Junior developer"),
