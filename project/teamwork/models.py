@@ -10,11 +10,11 @@ __all__ = (
     "EventScheduler"
 )
 POSITION_CHOICES = (
-    ("JR", "Junior developer"),
-    ("MD", "Middle developer"),
-    ("SR", "Senior developer"),
-    ("TL", "Team lead"),
-    ("PM", "Project manager"),
+    ("Junior developer", "Junior developer"),
+    ("Middle developer", "Middle developer"),
+    ("Senior developer", "Senior developer"),
+    ("Team lead", "Team lead"),
+    ("Project manager", "Project manager"),
 )
 PRIORITY_CHOICES = (
     ("Lowset", "Очень низкий"),
