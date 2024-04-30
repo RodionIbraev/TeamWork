@@ -22,3 +22,4 @@ class RefreshTokenMiddleware:
             except jwt.ExpiredSignatureError:
                 response = self.get_response(request)
                 return response
+        return self.get_response(request)
