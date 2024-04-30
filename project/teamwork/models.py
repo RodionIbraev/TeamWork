@@ -43,7 +43,6 @@ class Employee(AbstractUser, SoftDeleteModel):  # для физического 
     """
     Модель сотрудника
     """
-
     email = models.EmailField(max_length=128, unique=True, verbose_name="Email")
     password = models.CharField(max_length=128, verbose_name="Пароль")
     post = models.CharField(max_length=128, choices=POSITION_CHOICES, verbose_name="Должность")
@@ -60,12 +59,20 @@ class Employee(AbstractUser, SoftDeleteModel):  # для физического 
         verbose_name_plural = "Сотрудники"
         ordering = ("first_name",)
 
+    @staticmethod
+    def get_post_names():
+        post_names = [x[1] for x in POSITION_CHOICES]
+        return post_names
+
+    @staticmethod
+    def get_queryset():
+        return Employee.objects.all()
+
 
 class Project(SoftDeleteModel):
     """
     Модель проекта
     """
-
     name = models.CharField(max_length=128, verbose_name="Название")
     description = models.CharField(max_length=200, verbose_name="Описание")
     employee = models.ManyToManyField(Employee, verbose_name="Сотрудник проекта", related_name="project_as_employee")
@@ -80,12 +87,20 @@ class Project(SoftDeleteModel):
         verbose_name_plural = "Проекты"
         ordering = ("id",)
 
+    @staticmethod
+    def get_employees_of_project(project_id):
+        try:
+            project = Project.objects.get(pk=project_id)
+            employees = project.employee.all()
+            return employees
+        except Project.DoesNotExist:
+            return None
+
 
 class Task(SoftDeleteModel):
     """
     Модель задачи
     """
-
     name = models.CharField(max_length=128, verbose_name="Название")
     description = models.CharField(max_length=200, verbose_name="Описание")
     created_at = models.DateTimeField(auto_now=True, verbose_name="Дата создания")
@@ -116,7 +131,6 @@ class Comment(SoftDeleteModel):
     """
     Модель комментария
     """
-
     description = models.CharField(max_length=200, verbose_name="Описание")
     created_at = models.DateTimeField(auto_now=True, verbose_name="Дата создания")
     author = models.ForeignKey(Employee, verbose_name="Автор комментария", on_delete=models.CASCADE)
@@ -135,7 +149,6 @@ class EventScheduler(SoftDeleteModel):
     """
     Модель календаря событий
     """
-
     employee = models.ForeignKey(Employee, verbose_name="Автор события", on_delete=models.CASCADE)
     time_begin = models.DateTimeField(verbose_name="Дата начала события")
     time_end = models.DateTimeField(verbose_name="Дата окончания события")
