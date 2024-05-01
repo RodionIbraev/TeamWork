@@ -17,11 +17,11 @@ POSITION_CHOICES = (
     ("Project manager", "Project manager"),
 )
 PRIORITY_CHOICES = (
-    ("Lowset", "Очень низкий"),
-    ("Low", "Низкий"),
-    ("Medium", "Средний"),
-    ("High", "Важный"),
-    ("Highest", "Срочный"),
+    ("Очень низкий", "Очень низкий"),
+    ("Низкий", "Низкий"),
+    ("Средний", "Средний"),
+    ("Важный", "Важный"),
+    ("Срочный", "Срочный"),
 )
 CATEGORY_CHOICES = (
     ("Bug", "Баг"),
@@ -30,12 +30,12 @@ CATEGORY_CHOICES = (
     ("Refactor", "Рефакторинг")
 )
 STATUS_CHOICES = (
-    ("TO DO", "Созданo"),
-    ("Stopped", "Приостановлено"),
-    ("In progress", "В работе"),
-    ("Review", "На ревью"),
-    ("In testing", "В тестировании"),
-    ("Complete", "Выполнено"),
+    ("Созданo", "Созданo"),
+    ("Приостановлено", "Приостановлено"),
+    ("В работе", "В работе"),
+    ("На ревью", "На ревью"),
+    ("В тестировании", "В тестировании"),
+    ("Выполнено", "Выполнено"),
 )
 
 
@@ -55,13 +55,13 @@ class Employee(AbstractUser, SoftDeleteModel):  # для физического 
         return f"{self.first_name} {self.last_name}"
 
     class Meta:
-        verbose_name = "Сотрудники"
+        verbose_name = "Сотрудник"
         verbose_name_plural = "Сотрудники"
         ordering = ("first_name",)
 
     @staticmethod
     def get_post_names():
-        post_names = [x[1] for x in POSITION_CHOICES]
+        post_names = [x[0] for x in POSITION_CHOICES]
         return post_names
 
     @staticmethod
@@ -120,6 +120,21 @@ class Task(SoftDeleteModel):
     @staticmethod
     def get_user_tasks(user):
         return Task.objects.filter(executor=user)
+
+    @staticmethod
+    def get_priority_names():
+        priority_names = [x[0] for x in PRIORITY_CHOICES]
+        return priority_names
+
+    @staticmethod
+    def get_category_names():
+        category_names = [x[0] for x in CATEGORY_CHOICES]
+        return category_names
+
+    @staticmethod
+    def get_status_names():
+        status_names = [x[0] for x in STATUS_CHOICES]
+        return status_names
 
     class Meta:
         verbose_name = "Задача"

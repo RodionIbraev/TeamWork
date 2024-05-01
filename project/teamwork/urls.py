@@ -17,11 +17,12 @@ Including another URLconf
 from django.urls import path
 
 from .views import (RegisterView, LoginView, LogoutView, TaskView, ProjectView, UserProfileView, EventSchedulerView,
-                    GetEmployeesView)
+                    GetEmployeesView, GetTaskChoicesView)
 
 urlpatterns = [
     path("get-employees/", GetEmployeesView.as_view(), name="get-employees"),
     path("get-employees/<str:project_id>/", GetEmployeesView.as_view(), name="get-project-employees"),
+    path("get-task-choices/", GetTaskChoicesView.as_view(), name="get-task-choices"),
 
     path("register/", RegisterView.as_view(), name="register"),
     path("login/", LoginView.as_view(), name="login"),

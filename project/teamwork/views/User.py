@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.views import APIView
 
-from teamwork.models import Employee, Project
+from teamwork.models import Employee
 from teamwork.serializers import UserSerializer
 from teamwork.views.auxiliary import auth_required, get_user
 
@@ -34,14 +34,6 @@ class RegisterView(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
-
-    def get(self, request):
-        post_names = Employee.get_post_names()
-        response = Response()
-        response.data = {
-            "post_names": post_names
-        }
-        return response
 
 
 class LoginView(APIView):
@@ -99,16 +91,3 @@ class UserProfileView(APIView):
         user = get_user(request)
         serializer = UserSerializer(user)
         return Response(serializer.data)
-
-
-class GetEmployeesView(APIView):
-    """
-    Получение пользоватиелей
-    """
-    @auth_required
-    def get(self, request, project_id=None):
-        employees = Employee.get_queryset()
-        if project_id:
-            employees = Project.get_employees_of_project(project_id)
-        users_serializer = UserSerializer(employees, many=True)
-        return Response(users_serializer.data)
