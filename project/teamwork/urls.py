@@ -17,7 +17,7 @@ Including another URLconf
 from django.urls import path
 
 from .views import (RegisterView, LoginView, LogoutView, TaskView, ProjectView, UserProfileView, EventSchedulerView,
-                    GetEmployeesView, GetTaskChoicesView, GetPostNamesView)
+                    GetEmployeesView, GetTaskChoicesView, GetPostNamesView, CommentView)
 
 urlpatterns = [
     path("get-employees/", GetEmployeesView.as_view(), name="get-employees"),
@@ -35,10 +35,15 @@ urlpatterns = [
     path("projects/", ProjectView.as_view(), name="view-projects"),
     path("project/<str:project_id>/", ProjectView.as_view(), name="view-board"),
 
-    path("project/<str:project_id>/task-create/", TaskView.as_view(), name="task-create"),
-    path("task-delete/<str:task_id>/", TaskView.as_view(), name="task-delete"),
-    path("user-tasks/", TaskView.as_view(), name="user-tasks"),
+    path("project/<str:project_id>/task/create/", TaskView.as_view(), name="task-create"),
+    path("task/delete/<str:task_id>/", TaskView.as_view(), name="task-delete"),
+    path("user/tasks/", TaskView.as_view(), name="user-tasks"),
 
     path("event-scheduler/", EventSchedulerView.as_view(), name="event-scheduler"),
     path("event-scheduler/create", EventSchedulerView.as_view(), name="event-scheduler-create"),
+    path("event-scheduler/delete/<str:event_id>/", EventSchedulerView.as_view(), name="event-scheduler-delete"),
+
+    path("task/<str:task_id>/comments", EventSchedulerView.as_view(), name="task-comments"),
+    path("task/<str:task_id>/comment/create", EventSchedulerView.as_view(), name="comment-create"),
+    path("/comment/<str:comm_id>/delete", EventSchedulerView.as_view(), name="comment-delete"),
 ]

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Employee, Project, Task, EventScheduler
+from .models import Employee, Project, Task, EventScheduler, Comment
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -52,6 +52,17 @@ class EventSchedulerSerializer(serializers.ModelSerializer):
         model = EventScheduler
         fields = [
             "id", "employee", "time_begin", "time_end", "name", "created_at"
+        ]
+        extra_kwargs = {
+            "created_at": {"read_only": True},
+        }
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = [
+            "id", "description", "author", "task", "created_at"
         ]
         extra_kwargs = {
             "created_at": {"read_only": True},
