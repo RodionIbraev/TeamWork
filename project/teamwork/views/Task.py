@@ -15,9 +15,10 @@ class TaskView(APIView):
         Создание задачи
         """
         user = get_user(request)
-        request.data["creator"] = user.id
-        request.data["project"] = project_id
-        serializer = self.serializer_class(data=request.data)
+        req_data = request.data.copy()
+        req_data["creator"] = user.id
+        req_data["project"] = project_id
+        serializer = self.serializer_class(data=req_data)
 
         if serializer.is_valid(raise_exception=True):
             serializer.save()
