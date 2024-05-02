@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Helmet } from 'react-helmet';
-import '../styles/projects.css'
+import { useParams } from 'react-router-dom';
 
-function Projects() {
-    const [projects, setProjects] = useState([]);
+function ProjectTasks() {
+    const { projectId } = useParams();
+    const [project, setProject] = useState(null);
     const [employees, setEmployees] = useState([]);
 
     useEffect(() => {
-        const fetchProjects = async () => {
+        const fetchProject = async () => {
             try {
-                const responseProjects = await axios.get('http://127.0.0.1:8000/projects/', {
+                const responseProject = await axios.get(`http://127.0.0.1:8000/project/${projectId}`, {
                     headers: {
                         'token': sessionStorage.getItem("accessToken"),
                     }
                 });
-                setProjects(responseProjects.data);
+                setProject(responseProject.data);
             } catch (error) {
-                console.error('Error fetching projects data:', error);
+                console.error('Error fetching project data:', error);
             }
         };
 
@@ -35,9 +34,13 @@ function Projects() {
             }
         };
 
-        fetchProjects();
+        fetchProject();
         fetchEmployees();
-    }, []);
+    }, [projectId]);
+
+    if (!project) {
+        return <div>Loading...</div>;
+    }
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -56,26 +59,13 @@ function Projects() {
     };
 
     return (
-        <div className='projects'>
-            <Helmet>
-                <title>Просмотр проектов</title>
-            </Helmet>
-            {projects.map(project => (
-              <div key={project.id} className='project-card'>
-                <Link key={project.id} to={`/project/${project.id}`} className='project-link'>
-                  <div className="card-top">
-                    <p>Создатель: {getEmployeeName(project.creator)}</p>
-                    <p><strong>{project.name}</strong></p>
-                    <p>Создан: {formatDate(project.created_at)}</p>
-                  </div>
-                  <div className="description">
-                    <p>{project.description}</p>
-                  </div>
-                  </Link>
-              </div>
-            ))}
+        <div>
+            <h2>{project.name}</h2>
+            <p>Описание: {project.description}</p>
+            <p>Создан: {formatDate(project.created_at)}</p>
+            <p>Создатель: {getEmployeeName(project.creator)}</p>
         </div>
     );
 }
 
-export default Projects;
+export default ProjectTasks;

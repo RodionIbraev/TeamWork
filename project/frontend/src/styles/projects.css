@@ -1,0 +1,40 @@
+.projects {
+    margin-bottom: 100px;
+}
+
+.project-card {
+    width: 1500px;
+    border: 2px solid var(--black-color);
+    border-radius: 25px;
+    margin: 0 auto;
+    margin-top: 20px;
+    background-color: var(--white-color);
+    transition: 300ms ease-in-out;
+}
+
+.project-card:hover {
+    transform: scale(1.05);
+}
+
+.project-link {
+    text-decoration: none;
+    color: var(--black-color);
+    font-size: 18px;
+}
+
+.card-top {
+    background-color: var(--blue-color);
+    border-radius: 25px 25px 0 0;
+    border-bottom: 2px solid var(--black-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    padding: 0 20px 0 20px;
+}
+
+.description {
+    text-align: left;
+    min-height: 50px;
+    padding: 10px 20px 0 20px;
+}
