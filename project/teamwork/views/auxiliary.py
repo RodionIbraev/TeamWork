@@ -8,6 +8,7 @@ from teamwork.models import Employee
 def auth_required(view_func):
     @wraps(view_func)
     def wrapper(self, request, *args, **kwargs):
+        print(request.headers)
         token = request.headers.get("token")
         if not token:
             token = request.COOKIES.get("jwt_token")
