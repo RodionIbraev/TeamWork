@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 function ProjectTasks() {
+    const navigate = useNavigate();
     const { projectId } = useParams();
     const [project, setProject] = useState(null);
     const [employees, setEmployees] = useState([]);
 
     useEffect(() => {
+        if (!sessionStorage.getItem("accessToken")) {
+            navigate('/login');
+          } else {
         const fetchProject = async () => {
             try {
                 const responseProject = await axios.get(`http://127.0.0.1:8000/project/${projectId}`, {
@@ -36,7 +40,7 @@ function ProjectTasks() {
 
         fetchProject();
         fetchEmployees();
-    }, [projectId]);
+    }}, [projectId]);
 
     if (!project) {
         return <div>Loading...</div>;

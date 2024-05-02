@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Helmet } from 'react-helmet';
 import '../styles/projects.css'
@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Projects() {
+    const navigate = useNavigate();
     const [projects, setProjects] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [userProfile, setUserProfile] = useState(null);
@@ -17,6 +18,9 @@ function Projects() {
 
     useEffect(() => {
         const fetchProjects = async () => {
+          if (!sessionStorage.getItem("accessToken")) {
+            navigate('/login');
+          } else {
             try {
                 const responseProjects = await axios.get('http://127.0.0.1:8000/projects/', {
                     headers: {
@@ -27,7 +31,7 @@ function Projects() {
             } catch (error) {
                 console.error('Error fetching projects data:', error);
             }
-        };
+        }};
 
         const fetchEmployees = async () => {
             try {

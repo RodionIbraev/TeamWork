@@ -8,7 +8,7 @@ import Login from './pages/login';
 import { UserProfile } from './pages/user-profile';
 import Projects from './pages/projects';
 import ProjectTasks from './pages/projectTasks';
-import ProjectsCreate from './pages/project-create';
+import ProjectCreate from './pages/project-create';
 import SideBar from './components/sideBar';
 
 
@@ -25,7 +25,7 @@ function App() {
           <Route path='/user-profile' element={<UserProfile />} />
           <Route path='/projects' element={<Projects />} />
           <Route path="/project/:projectId" element={<ProjectTasks />} />
-          <Route path='/project-create' element={<ProjectsCreate />} />
+          <Route path='/project-create' element={<ProjectCreate />} />
         </Routes>
         <Footer />
       </Router>
