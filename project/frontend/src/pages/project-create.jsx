@@ -4,6 +4,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Helmet } from "react-helmet";
+import '../styles/project-create.css'
 
 function ProjectCreate() {
     const navigate = useNavigate();
@@ -76,7 +77,7 @@ function ProjectCreate() {
 
             setTimeout(() => {
                 navigate("/projects");
-            }, 3000);
+            }, 2000);
 
             console.log("Success!", response.data);
         } catch (error) {
@@ -124,19 +125,19 @@ function ProjectCreate() {
     return (
         <div>
             <Helmet>
-                <title>Регистрация</title>
+                <title>Создание проекта</title>
             </Helmet>
             <form method="post" className="form">
                 <div className="inputs">
-                    <label htmlFor="name">Название</label><br />
+                    <label htmlFor="name">Название:</label><br /><br />
                     <input type="text" name="name" id="name" value={formData.name} onChange={handleChange} required />
                 </div>
                 <div className="inputs">
-                    <label htmlFor="description">Описание</label><br />
-                    <input type="text" name="description" id="description" value={formData.description} onChange={handleChange} required />
+                    <label htmlFor="description">Описание:</label><br /><br />
+                    <textarea name="description" id="description" value={formData.description} onChange={handleChange} required />
                 </div>
                 <div className="inputs">
-                    <label htmlFor="employee">Сотрудники</label><br />
+                    <label htmlFor="employee">Сотрудники:</label><br /><br />
                     <select multiple name="employee" id="employee" value={formData.employee} onChange={handleSelectChange} required>
                         {employees.map(employee => (
                             <option key={employee.id} value={employee.id}>
