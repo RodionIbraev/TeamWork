@@ -45,5 +45,5 @@ urlpatterns = [
 
     path("task/<str:task_id>/comments", EventSchedulerView.as_view(), name="task-comments"),
     path("task/<str:task_id>/comment/create", EventSchedulerView.as_view(), name="comment-create"),
-    path("/comment/<str:comm_id>/delete", EventSchedulerView.as_view(), name="comment-delete"),
+    path("comment/<str:comm_id>/delete", EventSchedulerView.as_view(), name="comment-delete"),
 ]

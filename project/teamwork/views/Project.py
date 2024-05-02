@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -38,7 +39,7 @@ class ProjectView(APIView):
             project_serializer = self.serializer_class(project)
             return Response(project_serializer.data)
         else:
-            projects = Project.objects.filter(employee=user, creator=user)
+            projects = Project.objects.filter(Q(employee=user) | Q(creator=user))
             project_serializer = self.serializer_class(projects, many=True)
             return Response(project_serializer.data)
 
