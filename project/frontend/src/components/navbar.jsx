@@ -1,52 +1,93 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/navbar.css";
 import logo from "../assets/logo.svg";
 import axios from "axios";
-import { useLocation } from 'react-router-dom';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate, useLocation  } from 'react-router-dom';
+import { SignOut } from 'phosphor-react';
 
 export const Navbar = () => {
-    const [firstName, setFirstName] = useState("");
-    const [isLoggedin, setLoggedin] = useState("");
-    
+    const [fullName, setFullName] = useState("");
+    const [isLoggedin, setLoggedin] = useState(false);
+    const [pageTitle, setPageTitle] = useState("");
+    const navigate = useNavigate();
+    const location = useLocation();
+
     useEffect(() => {
         const checkLoggedInUser = async () => {
-            try {
-                const token = localStorage.getItem("accessToken");
-                if (token) {
+            const token = sessionStorage.getItem("accessToken");
+            if (token) {
+                try {
                     const config = {
                         headers: {
-                            "Authorization": `Bearer ${token}`
+                            'token': token,
                         }
                     };
                     const response = await axios.get("http://127.0.0.1:8000/user-profile/", config);
                     setLoggedin(true);
-                    setFirstName(response.data.first_name);
-                } else {
+                    setFullName(`${response.data.first_name} ${response.data.last_name}`);
+                } catch (error) {
                     setLoggedin(false);
-                    setFirstName("");
+                    setFullName("");
                 }
-            } catch (error) {
+            } else {
                 setLoggedin(false);
-                setFirstName("");
+                setFullName("");
             }
         };
 
         checkLoggedInUser();
-    }, []);
+
+        setPageTitle(document.title);
+
+    const handleTitleChange = () => {
+        setPageTitle(document.title);
+    };
+
+    window.addEventListener('titlechange', handleTitleChange);
+
+    return () => window.removeEventListener('titlechange', handleTitleChange);
+}, [location.pathname, isLoggedin, fullName, pageTitle]);
+
+    const handleLogout = () => {
+        sessionStorage.removeItem("accessToken");
+        setFullName("");
+        setLoggedin(false);
+
+        toast.success("Вы вышли из системы, переходим на главную страницу");
+
+            setTimeout(() => {
+                navigate("/");
+            }, 2000);
+    };
 
     return (
         <div className="navbar">
             <div className="logo">
                 <img src={logo} alt="" />
             </div>
+            <h1>{pageTitle}</h1>
 
-
-            {isLoggedin ? (
-                <p>{firstName}</p>
-            ) : (
-                <p></p>
+            {isLoggedin && (
+                <div className="userInfo">
+                    <p>{fullName}</p>
+                    <button onClick={handleLogout}><SignOut size={30} /></button>
+                </div>
             )}
+
+            <ToastContainer 
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </div>
     );
 };
