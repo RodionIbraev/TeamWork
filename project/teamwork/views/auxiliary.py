@@ -8,7 +8,7 @@ from teamwork.models import Employee
 def auth_required(view_func):
     @wraps(view_func)
     def wrapper(self, request, *args, **kwargs):
-        token = request.COOKIES.get("jwt_token")
+        token = request.headers.get("token")
         if not token:
             raise AuthenticationFailed("Не авторизован!")
         try:
@@ -22,7 +22,7 @@ def auth_required(view_func):
 
 
 def get_user(request):
-    token = request.COOKIES.get("jwt_token")
+    token = request.headers.get("token")
     payload = jwt.decode(token, "secret", algorithms=["HS256"])
     user = Employee.objects.get(id=payload["id"])
     return user

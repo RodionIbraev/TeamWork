@@ -54,7 +54,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "teamwork.middleware.RefreshTokenMiddleware"
+    # "teamwork.middleware.RefreshTokenMiddleware"
 ]
 
 ROOT_URLCONF = "teamwork.urls"
@@ -139,3 +139,4 @@ AUTH_USER_MODEL = "teamwork.Employee"
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = ['token']
