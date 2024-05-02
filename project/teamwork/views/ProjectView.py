@@ -39,7 +39,7 @@ class ProjectView(APIView):
             project_serializer = self.serializer_class(project)
             return Response(project_serializer.data)
         else:
-            projects = Project.objects.filter(Q(employee=user) | Q(creator=user))
+            projects = Project.objects.filter(Q(employee=user) | Q(creator=user)).distinct()
             project_serializer = self.serializer_class(projects, many=True)
             return Response(project_serializer.data)
 
