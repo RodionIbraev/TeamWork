@@ -31,10 +31,12 @@ urlpatterns = [
     path("user-profile/", UserProfileView.as_view(), name="user-profile"),
 
     path("project/create", ProjectView.as_view(), name="create-project"),
+    path("project/delete/<str:project_id>/", ProjectView.as_view(), name="delete-project"),
     path("projects/", ProjectView.as_view(), name="view-projects"),
     path("project/<str:project_id>/", ProjectView.as_view(), name="view-board"),
 
     path("project/<str:project_id>/task-create/", TaskView.as_view(), name="task-create"),
+    path("task-delete/<str:task_id>/", TaskView.as_view(), name="task-delete"),
     path("user-tasks/", TaskView.as_view(), name="user-tasks"),
 
     path("event-scheduler/", EventSchedulerView.as_view(), name="event-scheduler"),

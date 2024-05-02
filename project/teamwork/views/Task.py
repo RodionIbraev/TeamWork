@@ -32,3 +32,17 @@ class TaskView(APIView):
         tasks = Task.get_user_tasks(user)
         serializer = self.serializer_class(tasks, many=True)
         return Response(serializer.data)
+
+    @auth_required
+    def delete(self, request, task_id=None):
+        """
+        Удаление задачи
+        """
+        response = Response()
+        if task_id:
+            task = Task.objects.get(id=task_id)
+            task.delete()
+            response.data = {
+                "success_message": "Задача успешно удалёна!",
+            }
+            return response

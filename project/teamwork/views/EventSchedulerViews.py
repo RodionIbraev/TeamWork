@@ -32,8 +32,15 @@ class EventSchedulerView(APIView):
             return Response(serializer.data)
 
     @auth_required
-    def delete(self, request):
+    def delete(self, request, event_id=None):
         """
         Удаление события
         """
-        pass
+        response = Response()
+        if event_id:
+            event = EventScheduler.objects.get(id=event_id)
+            event.delete()
+            response.data = {
+                "success_message": "Событие успешно удалёно!",
+            }
+            return response

@@ -16,8 +16,9 @@ class ProjectView(APIView):
         Создание проекта
         """
         user = get_user(request)
-        request.data["creator"] = user.id
-        serializer = self.serializer_class(data=request.data)
+        req_data = request.data.copy()
+        req_data["creator"] = user.id
+        serializer = self.serializer_class(data=req_data)
 
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -40,3 +41,17 @@ class ProjectView(APIView):
             projects = Project.objects.filter(employee=user)
             project_serializer = self.serializer_class(projects, many=True)
             return Response(project_serializer.data)
+
+    @auth_required
+    def delete(self, request, project_id=None):
+        """
+        Удаление проекта
+        """
+        response = Response()
+        if project_id:
+            project = Project.objects.get(id=project_id)
+            project.delete()
+            response.data = {
+                "success_message": "Проект успешно удалён!",
+            }
+            return response
