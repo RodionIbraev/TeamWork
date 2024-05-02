@@ -10,8 +10,38 @@
     color: var(--white-color);
 }
 
+.navbar h1 {
+    font-size: 36px;
+    text-transform: uppercase;
+    font-weight: 400;
+    padding-top: 19px;
+}
+
 .logo {
     position: absolute;
     top: 15px;
-    left: 10px;
+    left: 50px;
+}
+
+
+.userInfo button {
+    background-color: inherit;
+    border: none;
+    color: var(--white-color);
+    cursor: pointer;
+    transition: 300ms ease-in-out;
+    margin-left: 20px;
+}
+
+.userInfo button:hover {
+    color: var(--high-color);
+    transform: scale(1.1);
+}
+
+.userInfo {
+    font-size: 20px;
+    display: flex;
+    position: absolute;
+    right: 50px;
+    top: 28px;
 }

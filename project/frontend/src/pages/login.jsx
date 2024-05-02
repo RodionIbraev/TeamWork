@@ -40,9 +40,7 @@ export default function Login () {
                 navigate("/user-profile");
             }, 1000);
 
-            console.log("Success!", response.data)
-            localStorage.setItem("accessToken", response.data.tokens.access);
-            localStorage.setItem("refreshToken", response.data.tokens.refresh);
+            sessionStorage.setItem("accessToken", response.data["jwt_token"]);
         }
         catch(error) {
             console.log("error", error.response?.data);
@@ -92,4 +90,3 @@ export default function Login () {
         </div>
     )
 }
-
