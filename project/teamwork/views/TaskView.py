@@ -25,7 +25,7 @@ class TaskView(APIView):
             return Response(serializer.data)
 
     @auth_required
-    def get(self, request):
+    def get(self, request, project_id=None):
         """
         Просмотр задач пользователя
         """
