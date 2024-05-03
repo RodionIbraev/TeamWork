@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -8,6 +9,10 @@ from teamwork.models import Task, STATUS_CHOICES
 
 class TaskView(APIView):
     serializer_class = TaskSerializer
+
+    @staticmethod
+    def _get_task(task_id):
+        return Task.objects.get(id=task_id)
 
     @auth_required
     def post(self, request, project_id):
@@ -24,6 +29,7 @@ class TaskView(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @auth_required
     def get(self, request, project_id=None):
@@ -36,13 +42,26 @@ class TaskView(APIView):
         return Response(serializer.data)
 
     @auth_required
+    def patch(self, request, task_id=None):
+        """
+        Редактирование задачи
+        """
+        if task_id:
+            task = self._get_task(task_id)
+            serializer = self.serializer_class(task, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @auth_required
     def delete(self, request, task_id=None):
         """
         Удаление задачи
         """
         response = Response()
         if task_id:
-            task = Task.objects.get(id=task_id)
+            task = self._get_task(task_id)
             task.delete()
             response.data = {
                 "success_message": "Задача успешно удалёна!",

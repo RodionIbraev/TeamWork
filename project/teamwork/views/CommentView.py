@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -8,6 +9,10 @@ from teamwork.models import Comment
 
 class CommentView(APIView):
     serializer_class = CommentSerializer
+
+    @staticmethod
+    def _get_comment(comm_id):
+        return Comment.objects.get(id=comm_id)
 
     @auth_required
     def post(self, request, task_id):
@@ -23,6 +28,7 @@ class CommentView(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @auth_required
     def get(self, request, task_id):
@@ -34,13 +40,26 @@ class CommentView(APIView):
         return Response(serializer.data)
 
     @auth_required
+    def patch(self, request, comm_id=None):
+        """
+        Редактирование задачи
+        """
+        if comm_id:
+            comm = self._get_comment(comm_id)
+            serializer = self.serializer_class(comm, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @auth_required
     def delete(self, request, comm_id=None):
         """
         Удаление задачи
         """
         response = Response()
         if comm_id:
-            comm = Comment.objects.get(id=comm_id)
+            comm = self._get_comment(comm_id)
             comm.delete()
             response.data = {
                 "success_message": "Комментарий успешно удалён!",

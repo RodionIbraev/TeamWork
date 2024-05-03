@@ -31,21 +31,25 @@ urlpatterns = [
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path("user-profile/", UserProfileView.as_view(), name="user-profile"),
+    path('employee/update/', UserProfileView.as_view(), name='update-employee-profile'),
 
     path("project/create", ProjectView.as_view(), name="create-project"),
-    path("project/delete/<str:project_id>/", ProjectView.as_view(), name="delete-project"),
+    path("project/<str:project_id>/delete/", ProjectView.as_view(), name="delete-project"),
     path("projects/", ProjectView.as_view(), name="view-projects"),
     path("project/<str:project_id>/", ProjectView.as_view(), name="view-board"),
 
     path("project/<str:project_id>/task/create/", TaskView.as_view(), name="task-create"),
-    path("task/delete/<str:task_id>/", TaskView.as_view(), name="task-delete"),
+    path("task/<str:task_id>/delete/", TaskView.as_view(), name="task-delete"),
+    path("task/<str:task_id>/update/", TaskView.as_view(), name="task-update"),
     path("user/tasks/", TaskView.as_view(), name="user-tasks"),
 
     path("event-scheduler/", EventSchedulerView.as_view(), name="event-scheduler"),
     path("event-scheduler/create", EventSchedulerView.as_view(), name="event-scheduler-create"),
-    path("event-scheduler/delete/<str:event_id>/", EventSchedulerView.as_view(), name="event-scheduler-delete"),
+    path("event-scheduler/<str:event_id>/delete/", EventSchedulerView.as_view(), name="event-scheduler-delete"),
+    path("event-scheduler/<str:event_id>/update/", EventSchedulerView.as_view(), name="event-scheduler-update"),
 
-    path("task/<str:task_id>/comments", EventSchedulerView.as_view(), name="task-comments"),
-    path("task/<str:task_id>/comment/create", EventSchedulerView.as_view(), name="comment-create"),
-    path("comment/<str:comm_id>/delete", EventSchedulerView.as_view(), name="comment-delete"),
+    path("task/<str:task_id>/comments", CommentView.as_view(), name="task-comments"),
+    path("task/<str:task_id>/comment/create", CommentView.as_view(), name="comment-create"),
+    path("comment/<str:comm_id>/delete", CommentView.as_view(), name="comment-delete"),
+    path("comment/<str:comm_id>/update", CommentView.as_view(), name="comment-update"),
 ]

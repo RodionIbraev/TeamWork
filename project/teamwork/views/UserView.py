@@ -2,6 +2,7 @@ import datetime
 
 import jwt
 from django.contrib.auth.password_validation import validate_password
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.views import APIView
@@ -34,6 +35,7 @@ class RegisterView(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(APIView):
@@ -84,10 +86,26 @@ class LogoutView(APIView):
 
 class UserProfileView(APIView):
     """
-    Профиль пользователя
+    Вьюха профиля пользователя
     """
     @auth_required
     def get(self, request):
+        """
+        Просмотр профиля пользователя
+        """
         user = get_user(request)
         serializer = UserSerializer(user)
         return Response(serializer.data)
+
+    @auth_required
+    def patch(self, request):
+        """
+        Редактирование профиля пользователя
+        """
+        user = get_user(request)
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

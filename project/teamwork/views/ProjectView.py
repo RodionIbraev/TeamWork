@@ -1,4 +1,5 @@
 from django.db.models import Q
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -10,6 +11,10 @@ from teamwork.models import Project, Task
 
 class ProjectView(APIView):
     serializer_class = ProjectSerializer
+
+    @staticmethod
+    def _get_project(project_id):
+        return Project.objects.get(id=project_id)
 
     @auth_required
     def post(self, request):
@@ -24,6 +29,7 @@ class ProjectView(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @auth_required
     def get(self, request, project_id=None):
@@ -33,7 +39,7 @@ class ProjectView(APIView):
         user = get_user(request)
         if project_id:
             try:
-                project = Project.objects.get(id=project_id)
+                project = self._get_project(project_id)
             except Project.DoesNotExist:
                 return Response(status=404, data={"message": f"Проект с id {project_id} не найден!"})
             project_serializer = self.serializer_class(project)
@@ -50,7 +56,7 @@ class ProjectView(APIView):
         """
         response = Response()
         if project_id:
-            project = Project.objects.get(id=project_id)
+            project = self._get_project(project_id)
             project.delete()
             response.data = {
                 "success_message": "Проект успешно удалён!",
