@@ -50,7 +50,7 @@ function TaskCreate() {
     useEffect(() => {
         const fetchExecutors = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/get-employees/', {
+                const response = await axios.get(`http://127.0.0.1:8000/get-employees/${projectId}`, {
                     headers: {
                         'token': sessionStorage.getItem("accessToken"),
                     }
@@ -136,6 +136,7 @@ function TaskCreate() {
                     <div className="inputs">
                         <label>Приоритет:</label>
                         <select name="priority" value={formData.priority} onChange={handleChange} required>
+                        <option value="" disabled selected>Выберите приоритет</option>
                             {priorities.map((priority, index) => (
                                 <option key={index} value={priority}>{priority}</option>
                             ))}
@@ -144,6 +145,7 @@ function TaskCreate() {
                     <div className="inputs">
                         <label>Категория:</label>
                         <select name="category" value={formData.category} onChange={handleChange} required>
+                        <option value="" disabled selected>Выберите категорию</option>
                             {categories.map((category, index) => (
                                 <option key={index} value={category}>{category}</option>
                             ))}
@@ -152,6 +154,7 @@ function TaskCreate() {
                     <div className="inputs">
                         <label>Исполнитель:</label>
                         <select name="executor" value={formData.executor} onChange={handleChange} required>
+                        <option value="" disabled selected>Выберите исполнителя</option>
                             {executors.map(executor => (
                                 <option key={executor.id} value={executor.id}>{`${executor.first_name} ${executor.last_name}`}</option>
                             ))}
