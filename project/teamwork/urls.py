@@ -39,6 +39,7 @@ urlpatterns = [
     path("project/<str:project_id>/", ProjectView.as_view(), name="view-board"),
 
     path("project/<str:project_id>/task/create/", TaskView.as_view(), name="task-create"),
+    path("task/<str:task_id>/", TaskView.as_view(), name="view-task"),
     path("task/<str:task_id>/delete/", TaskView.as_view(), name="task-delete"),
     path("task/<str:task_id>/update/", TaskView.as_view(), name="task-update"),
     path("user/tasks/", TaskView.as_view(), name="user-tasks"),

@@ -32,13 +32,17 @@ class TaskView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @auth_required
-    def get(self, request, project_id=None):
+    def get(self, request, task_id=None):
         """
         Просмотр задач пользователя
         """
         user = get_user(request)
-        tasks = Task.get_user_tasks(user)
-        serializer = self.serializer_class(tasks, many=True)
+        if task_id:
+            task = Task.objects.get(id=task_id)
+            serializer = TaskSerializer(task)
+        else:
+            tasks = Task.get_user_tasks(user)
+            serializer = self.serializer_class(tasks, many=True)
         return Response(serializer.data)
 
     @auth_required
