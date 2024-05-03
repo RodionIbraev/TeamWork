@@ -4,7 +4,7 @@
     color: var(--highest-color);
 }
 
-textarea {
+#description {
     resize: none;
     width: 400px;
     height: 100px;
