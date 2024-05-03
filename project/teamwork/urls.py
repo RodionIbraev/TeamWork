@@ -31,7 +31,7 @@ urlpatterns = [
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path("user-profile/", UserProfileView.as_view(), name="user-profile"),
-    path('employee/update/', UserProfileView.as_view(), name='update-employee-profile'),
+    path('user-profile/update/', UserProfileView.as_view(), name='user-profile-update'),
 
     path("project/create", ProjectView.as_view(), name="create-project"),
     path("project/<str:project_id>/delete/", ProjectView.as_view(), name="delete-project"),
