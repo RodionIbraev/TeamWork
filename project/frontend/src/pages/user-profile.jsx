@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Helmet } from 'react-helmet';
+import { useNavigate } from 'react-router-dom';
 
 export const UserProfile = () => {
+    const navigate = useNavigate();
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
+        if (!sessionStorage.getItem("accessToken")) {
+            navigate('/login');
+          } else {
         const fetchData = async () => {
             try {
                 const response = await axios.get('http://127.0.0.1:8000/user-profile/', {
@@ -21,7 +26,7 @@ export const UserProfile = () => {
         };
 
         fetchData();
-    }, []);
+    }}, []);
 
     return (
         <div className="main">
