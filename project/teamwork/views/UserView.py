@@ -1,7 +1,6 @@
 import datetime
 
 import jwt
-from django.contrib.auth.password_validation import validate_password
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
@@ -11,6 +10,8 @@ from teamwork.models import Employee
 from teamwork.serializers import UserSerializer
 from teamwork.views.auxiliary import auth_required, get_user
 
+from teamwork.logic.check_password_logic import check_password_complexity
+
 
 class RegisterView(APIView):
     """
@@ -18,19 +19,9 @@ class RegisterView(APIView):
     """
     def post(self, request):
         serializer = UserSerializer(data=request.data)
-        # Проверка пароля на сложность
-        try:
-            validate_password(request.data["password"])
-        except Exception as password_error:
-            error_array = []
-            for item in password_error:
-                error_array.append(item)
-            response = Response()
-            response.data = {
-                "Status": False,
-                "Errors": {"password": error_array}
-            }
-            return response
+        password_errors = check_password_complexity(request)
+        if password_errors:
+            return password_errors
 
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -103,6 +94,10 @@ class UserProfileView(APIView):
         Редактирование профиля пользователя
         """
         user = get_user(request)
+        password_errors = check_password_complexity(request)
+        if password_errors:
+            return password_errors
+
         serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
