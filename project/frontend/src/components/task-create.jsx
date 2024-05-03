@@ -24,6 +24,7 @@ function TaskCreate() {
     const [categories, setCategories] = useState([]);
     const [executors, setExecutors] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(true);
+    const [isLayoutVisible, setIsLayoutVisible] = useState(true);
 
     useEffect(() => {
         const fetchTaskChoices = async () => {
@@ -72,6 +73,10 @@ function TaskCreate() {
         }));
     };
 
+    const reloadPage = () => {
+        window.location.reload(); // Перезагрузить страницу
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -92,6 +97,7 @@ function TaskCreate() {
             toast.success("Задача успешно создана");
             setTimeout(() => {
                 closeModal();
+                reloadPage();
             }, 2000);
             
         } catch (error) {
@@ -110,10 +116,12 @@ function TaskCreate() {
     };
     const closeModal = () => {
         setIsModalOpen(false);
+        setIsLayoutVisible(false);
     };
     return (
         <div>
-{isModalOpen && (
+        {isLayoutVisible && <div className="layout" onClick={closeModal} />}
+        {isModalOpen && (
             <div>
             <form onSubmit={handleSubmit} className="form-task">
             <div className="form-container">

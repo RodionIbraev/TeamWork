@@ -20,11 +20,13 @@
     background: linear-gradient(180deg, rgba(107,87,245,1) 0%, rgba(148,237,250,1) 100%);
     padding: 0 50px 50px 50px;
     width: 850px;
-    margin: 0 auto;
-    margin-top: 20px;
     border-radius: 20px;
     border: 5px solid var(--black-color);
-    position: relative;
+    position: absolute;
+    z-index: 100;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 #description-task{
@@ -51,4 +53,14 @@
 .close-task-window:hover {
     transform: scale(1.1);
     color: var(--highest-color);
+}
+
+.layout {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Прозрачный черный цвет */
+    z-index: 99; /* Убедитесь, что этот слой над модальным окном */
 }
