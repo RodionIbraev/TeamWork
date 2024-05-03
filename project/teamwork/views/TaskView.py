@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 
 from teamwork.views.auxiliary import auth_required, get_user
 from teamwork.serializers import TaskSerializer
-from teamwork.models import Task
+from teamwork.models import Task, STATUS_CHOICES
 
 
 class TaskView(APIView):
@@ -18,6 +18,7 @@ class TaskView(APIView):
         req_data = request.data.copy()
         req_data["creator"] = user.id
         req_data["project"] = project_id
+        req_data["status"] = STATUS_CHOICES[0][0]
         serializer = self.serializer_class(data=req_data)
 
         if serializer.is_valid(raise_exception=True):
