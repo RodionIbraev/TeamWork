@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import TaskCreate from '../components/task-create.jsx'
 
 function ProjectTasks() {
     const navigate = useNavigate();
     const { projectId } = useParams();
     const [project, setProject] = useState(null);
     const [employees, setEmployees] = useState([]);
+    const [showTaskCreate, setShowTaskCreate] = useState(false);
 
     useEffect(() => {
         if (!sessionStorage.getItem("accessToken")) {
@@ -68,6 +70,10 @@ function ProjectTasks() {
             <p>Описание: {project.description}</p>
             <p>Создан: {formatDate(project.created_at)}</p>
             <p>Создатель: {getEmployeeName(project.creator)}</p>
+
+            <button onClick={() => setShowTaskCreate(true)}>Создать задачу</button>
+
+            {showTaskCreate && <TaskCreate />}
         </div>
     );
 }

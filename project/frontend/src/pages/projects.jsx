@@ -93,7 +93,7 @@ function Projects() {
   
   const handleDeleteProject = async () => {
       try {
-          await axios.delete(`http://127.0.0.1:8000/project/delete/${selectedProject.id}/`, {
+          await axios.delete(`http://127.0.0.1:8000/project/${selectedProject.id}/delete/`, {
               headers: {
                   'token': sessionStorage.getItem("accessToken"),
               }
