@@ -50,7 +50,14 @@
     margin-top: 25px;
     font-size: 16px;
     padding-top: 10px;
+    cursor: pointer;
+    transition: 200ms ease-in-out;
 }
+
+.task-card:hover {
+    transform: scale(1.1);
+}
+
 
 .task-info {
     text-align: left;
@@ -67,4 +74,27 @@
 .parent-element p {
     margin-bottom: 2px;
     margin-left: 5px;
+}
+
+.task-btn {
+    width: 200px;
+    height: 40px;
+    background-color: var(--blue-color);
+    border: 2px solid var(--black-color);
+    border-radius: 10px;
+    font-size: 18px;
+    margin: 20px 60px 20px 20px;
+    cursor: pointer;
+    transition: 200ms ease-in-out;
+}
+
+.task-btn:hover {
+    background-color: var(--violet-color);
+    color: var(--white-color);
+    transform: scale(1.1);
+}
+
+.task-btns {
+    display: flex;
+    justify-content: flex-end;
 }

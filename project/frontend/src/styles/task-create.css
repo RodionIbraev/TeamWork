@@ -22,7 +22,7 @@
     width: 850px;
     border-radius: 20px;
     border: 5px solid var(--black-color);
-    position: absolute;
+    position: fixed;
     z-index: 100;
     left: 50%;
     top: 50%;
@@ -52,15 +52,5 @@
 
 .close-task-window:hover {
     transform: scale(1.1);
-    color: var(--highest-color);
-}
-
-.layout {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Прозрачный черный цвет */
-    z-index: 99; /* Убедитесь, что этот слой над модальным окном */
+    color: var(--high-color);
 }

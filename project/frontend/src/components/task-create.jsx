@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import '../styles/task-create.css'
 import { X } from 'phosphor-react'
 
-function TaskCreate() {
+const TaskCreate = ({onClose})=> {
     const navigate = useNavigate();
     const { projectId } = useParams();
     const [formData, setFormData] = useState({
@@ -23,8 +23,7 @@ function TaskCreate() {
     const [priorities, setPriorities] = useState([]);
     const [categories, setCategories] = useState([]);
     const [executors, setExecutors] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(true);
-    const [isLayoutVisible, setIsLayoutVisible] = useState(true);
+    const [isOverlayVisible, setIsOverlayVisible] = useState(true);
 
     useEffect(() => {
         const fetchTaskChoices = async () => {
@@ -74,7 +73,7 @@ function TaskCreate() {
     };
 
     const reloadPage = () => {
-        window.location.reload(); // Перезагрузить страницу
+        window.location.reload();
     };
 
     const handleSubmit = async (e) => {
@@ -96,7 +95,6 @@ function TaskCreate() {
             console.log("Success!", response.data);
             toast.success("Задача успешно создана");
             setTimeout(() => {
-                closeModal();
                 reloadPage();
             }, 2000);
             
@@ -115,17 +113,16 @@ function TaskCreate() {
         }
     };
     const closeModal = () => {
-        setIsModalOpen(false);
-        setIsLayoutVisible(false);
+        setIsOverlayVisible(false);
+        onClose();
     };
+
     return (
         <div>
-        {isLayoutVisible && <div className="layout" onClick={closeModal} />}
-        {isModalOpen && (
-            <div>
+        {isOverlayVisible && <div className="overlay" onClick={closeModal} />}
             <form onSubmit={handleSubmit} className="form-task">
             <div className="form-container">
-            <X size={30} onClick={closeModal} className='close-task-window'/> 
+            <X size={30} onClick={onClose} className='close-task-window'/> 
                 <div className="left">
                     <div className="inputs">
                         <label>Название:</label>
@@ -186,8 +183,5 @@ function TaskCreate() {
         />
         </div>
     )}
-        </div>
-    );
-}
 
 export default TaskCreate;

@@ -1,0 +1,17 @@
+.task-modal {
+    background: rgb(107,87,245);
+    background: linear-gradient(180deg, rgba(107,87,245,1) 0%, rgba(148,237,250,1) 100%);
+    padding: 0 50px 50px 50px;
+    width: 850px;
+    border-radius: 20px;
+    border: 5px solid var(--black-color);
+    position: fixed;
+    z-index: 100;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.inputs p {
+    font-size: 18px;
+}
