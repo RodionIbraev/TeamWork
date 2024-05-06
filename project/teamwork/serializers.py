@@ -1,15 +1,28 @@
+import base64
 from rest_framework import serializers
 from .models import Employee, Project, Task, EventScheduler, Comment
 
 
 class UserSerializer(serializers.ModelSerializer):
+    photo_data = serializers.SerializerMethodField()
+
     class Meta:
         model = Employee
-        fields = ["id", "first_name", "last_name", "email", "photo", "password", "post", "date_joined"]
+        fields = ["id", "first_name", "last_name", "email", "photo", "password", "post", "date_joined", "photo_data"]
         extra_kwargs = {
+            "photo": {"write_only": True},
             "password": {"write_only": True},
-            "date_joined": {"read_only": True}
+            "date_joined": {"read_only": True},
+            "photo_data": {"read_only": True}
         }
+
+    @staticmethod
+    def get_photo_data(obj):
+        if obj.photo:
+            with open(obj.photo.path, "rb") as image_file:
+                encoded_string = base64.b64encode(image_file.read())
+                return encoded_string.decode('utf-8')
+        return None
 
     def create(self, validated_data):
         password = validated_data.pop("password", None)

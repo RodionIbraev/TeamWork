@@ -18,7 +18,7 @@ from django.urls import path
 from django.contrib import admin
 
 from .views import (RegisterView, LoginView, LogoutView, TaskView, ProjectView, UserProfileView, EventSchedulerView,
-                    GetEmployeesView, GetTaskChoicesView, GetPostNamesView, CommentView)
+                    GetEmployeesView, GetTaskChoicesView, GetPostNamesView, CommentView, ExportToXLSXView)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -53,4 +53,6 @@ urlpatterns = [
     path("task/<str:task_id>/comment/create", CommentView.as_view(), name="comment-create"),
     path("comment/<str:comm_id>/delete", CommentView.as_view(), name="comment-delete"),
     path("comment/<str:comm_id>/update", CommentView.as_view(), name="comment-update"),
+
+    path("project/<str:project_id>/export/", ExportToXLSXView.as_view(), name="project-export"),
 ]

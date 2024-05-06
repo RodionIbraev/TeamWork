@@ -97,6 +97,9 @@ class Project(SoftDeleteModel):
         except Project.DoesNotExist:
             return None
 
+    def get_creator_name(self):
+        return f"{self.creator.first_name} {self.creator.last_name}"
+
 
 class Task(SoftDeleteModel):
     """
@@ -140,7 +143,7 @@ class Task(SoftDeleteModel):
     class Meta:
         verbose_name = "Задача"
         verbose_name_plural = "Задачи"
-        ordering = ("project",)
+        ordering = ("created_at",)
 
 
 class Comment(SoftDeleteModel):
