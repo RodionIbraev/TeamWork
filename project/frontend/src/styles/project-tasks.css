@@ -25,9 +25,9 @@
 
 .status-card-all {
     display: grid;
-    grid-template-columns: repeat(6, 250px);
+    grid-template-columns: repeat(6, 270px);
     grid-auto-rows: auto;
-    gap: 60px;
+    gap: 40px;
     justify-content: center;
     margin: 0 auto;
 }
@@ -97,4 +97,16 @@
 .task-btns {
     display: flex;
     justify-content: flex-end;
+}
+
+.task-info-click {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 5px;
+    color: var(--black-color);
+}
+
+.task-info-click svg:hover {
+    color: var(--violet-color);
+    transform: scale(1.1);
 }

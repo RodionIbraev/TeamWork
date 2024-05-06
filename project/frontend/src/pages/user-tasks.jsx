@@ -1,45 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import TaskCreate from '../components/task-create.jsx';
 import '../styles/project-tasks.css';
-import { User } from 'phosphor-react';
 import { BsExclamationCircle, BsCalendar2Check } from "react-icons/bs";
+import { PiProjectorScreen } from "react-icons/pi";
 import { FaInfoCircle, FaCommentDots } from "react-icons/fa";
 import { Helmet } from 'react-helmet';
 import TaskModal from '../components/task-modal.jsx';
-import { ToastContainer, toast } from 'react-toastify';
 
 function ProjectTasks() {
-    const { projectId } = useParams();
-    const [project, setProject] = useState(null);
+    
     const [employees, setEmployees] = useState([]);
     const [statusNames, setStatusNames] = useState([]);
-    const [showTaskCreate, setShowTaskCreate] = useState(false);
+    const [userTasks, setUserTasks] = useState([]);
     const [selectedTaskId, setSelectedTaskId] = useState(null);
     const [selectedTask, setSelectedTask] = useState(null);
+    const [projects, setProjects] = useState([]);
 
     useEffect(() => {
-        const fetchTaskChoices = async () => {
+        const fetchTaskData = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/get-task-choices/', {
-                    headers: {
-                        'token': sessionStorage.getItem("accessToken"),
-                    }
-                });
-                setStatusNames(response.data.status_names);
-            } catch (error) {
-            }
-        };
-
-        fetchTaskChoices();
-    }, []);
-
-    useEffect(() => {
-        const fetchProjectData = async () => {
-            try {
-                const [responseProject, responseEmployees] = await Promise.all([
-                    axios.get(`http://127.0.0.1:8000/project/${projectId}`, {
+                const [responseStatusNames, responseEmployees, responseUserTasks, responseProjects] = await Promise.all([
+                    axios.get('http://127.0.0.1:8000/get-task-choices/', {
                         headers: {
                             'token': sessionStorage.getItem("accessToken"),
                         }
@@ -48,50 +29,29 @@ function ProjectTasks() {
                         headers: {
                             'token': sessionStorage.getItem("accessToken"),
                         }
+                    }),
+                    axios.get('http://127.0.0.1:8000/user/tasks/', {
+                        headers: {
+                            'token': sessionStorage.getItem("accessToken"),
+                        }
+                    }),
+                    axios.get('http://127.0.0.1:8000/projects/', {
+                        headers: {
+                            'token': sessionStorage.getItem("accessToken"),
+                        }
                     })
                 ]);
-                setProject(responseProject.data);
+                setStatusNames(responseStatusNames.data.status_names);
                 setEmployees(responseEmployees.data);
+                setUserTasks(responseUserTasks.data);
+                setProjects(responseProjects.data);
             } catch (error) {
+                console.error('Error:', error);
             }
         };
 
-        if (projectId) {
-            fetchProjectData();
-        }
-    }, [projectId]);
-
-    const handleExportToXLSX = async () => {
-        try {
-            const response = await axios.get(`http://127.0.0.1:8000/project/${projectId}/export/`, {
-                headers: {
-                    'token': sessionStorage.getItem("accessToken"),
-                },
-                responseType: 'blob'
-            });
-    
-            const projectTitle = project.name.replaceAll(' ', '_');
-            const fileName = `${projectTitle}_export.xlsx`; 
-
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-    
-            link.setAttribute('download', fileName);
-    
-            document.body.appendChild(link);
-            link.click();
-    
-            link.parentNode.removeChild(link);
-
-            toast.success("Файл загружен!");
-        } catch (error) {
-        }
-    };
-
-    if (!project || statusNames.length === 0) {
-        return <div>Loading...</div>;
-    }
+        fetchTaskData();
+    }, []);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -109,6 +69,11 @@ function ProjectTasks() {
         return 'Unknown';
     };
 
+    const getProjectName = (projectId) => {
+        const project = projects.find(project => project.id === projectId);
+        return project ? project.name : 'Unknown';
+    };
+
     const getTaskById = async (taskId) => {
         try {
             const response = await axios.get(`http://127.0.0.1:8000/task/${taskId}/`, {
@@ -116,9 +81,9 @@ function ProjectTasks() {
                     'token': sessionStorage.getItem("accessToken"),
                 }
             });
-            setSelectedTask({...response.data, task_id: taskId});
+            setSelectedTask({ ...response.data, task_id: taskId });
         } catch (error) {
-
+            console.error('Error fetching task data:', error);
         }
     };
 
@@ -130,30 +95,18 @@ function ProjectTasks() {
     const handleCloseModal = () => {
         setSelectedTaskId(null);
         setSelectedTask(null);
-        setShowTaskCreate(null);
     };
 
     return (
-        <div className='project-tasks'>
+        <div className='project-tasks' style={{marginTop: '80px'}}>
             <Helmet>
-                <title>Задачи проекта "{project.name}"</title>
+                <title>Ваши задачи</title>
             </Helmet>
-            <div className="task-btns">
-                <button className='task-btn'>Список сотрудников</button>
-                <button className='task-btn' onClick={handleExportToXLSX}>Экспорт в XLSX</button>
-                <button className='task-btn' onClick={() => setShowTaskCreate(true)}>Создать задачу</button>
-            </div>
-            {showTaskCreate && (
-                <TaskCreate 
-                    onClose={handleCloseModal}
-                />
-            )}
-
             <div className='status-card-all'>
                 {statusNames.map(status => (
                     <div key={status} className='status-card'>
                         <div className='status-name'>{status}</div>
-                        {project.tasks.filter(task => task.status === status).map(task => (
+                        {userTasks.filter(task => task.status === status).map(task => (
                             <div key={task.id} className={task.priority === 'Важный' ? 'task-card high' : task.priority === 'Срочный' ? 'task-card highest' : 'task-card default'}>
                                 <h4>{task.name}</h4>
                                 <div className="task-info">
@@ -166,8 +119,8 @@ function ProjectTasks() {
                                         <p>{task.priority}</p>
                                     </div>
                                     <div className="parent-element">
-                                        <User size={25} weight="bold" />
-                                        <p>{getEmployeeName(task.executor_id)}</p>
+                                        <PiProjectorScreen size={25} weight="bold" />
+                                        <p>{getProjectName(task.project)}</p>
                                     </div>
                                     <div className="task-info-click">
                                         <FaCommentDots size={25}/>
@@ -186,26 +139,12 @@ function ProjectTasks() {
                     formatDate={formatDate}
                     getEmployeeName={getEmployeeName}
                     onClose={handleCloseModal}
-                    showEditButton={true}
-                    modalSize="large"
+                    showEditButton={false}
+                    modalSize="small"
                 />
             )}
-
-            <ToastContainer 
-                position="bottom-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
         </div>
     );
 }
-
 
 export default ProjectTasks;

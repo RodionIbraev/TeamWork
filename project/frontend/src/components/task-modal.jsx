@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useParams } from 'react-router-dom';
 
-const TaskModal = ({ task, formatDate, getEmployeeName, onClose }) => {
+const TaskModal = ({ task, formatDate, getEmployeeName, onClose, showEditButton, modalSize }) => {
     const { projectId } = useParams ();
     const [isOverlayVisible, setIsOverlayVisible] = useState(true);
     const [editableTask, setEditableTask] = useState(null);
@@ -159,10 +159,14 @@ const TaskModal = ({ task, formatDate, getEmployeeName, onClose }) => {
         setEditableTask(null);
     };
 
+    const modalStyle = {
+        width: modalSize === 'large' ? '850px' : '350px',
+    };
+
     return (
         <div>
             {isOverlayVisible && <div className="overlay" onClick={closeModal} />}
-            <div className="task-modal">
+            <div className="task-modal" style={modalStyle}>
                 <div className="modal-content">
                     <X size={30} onClick={onClose} className='close-task-window'/>
                     <div className="inputs">
@@ -171,7 +175,6 @@ const TaskModal = ({ task, formatDate, getEmployeeName, onClose }) => {
                     </div>
                     <div className="form-container">
                     <div className="left">
-                        
                         <div className="inputs">
                             <label>Дедлайн:</label>
                             <p>{renderField('Deadline', formatDateTime(task.deadline), 'deadline')}</p>
@@ -186,7 +189,6 @@ const TaskModal = ({ task, formatDate, getEmployeeName, onClose }) => {
                         </div>
                     </div>
                     <div className="right">
-                        
                         <div className="inputs">
                             <label>Исполнитель:</label>
                             <p>{renderField('Executor', getEmployeeName(task.executor), 'executor')}</p>
@@ -209,14 +211,14 @@ const TaskModal = ({ task, formatDate, getEmployeeName, onClose }) => {
                             <label>Дата создания:</label>
                             <p>{formatDate(task.created_at)}</p>
                         </div>
-                        {editableTask ? (
-                                <>
-                                    <button onClick={handleSave} className='btnSubmit'>Сохранить</button>
-                                    <button onClick={handleCancelEdit} className='btnSubmit' style={{ marginLeft: '30px' }}>Отменить</button>
-                                </>
-                            ) : (
-                                <button onClick={handleEdit} className='btnSubmit'>Редактировать</button>
-                        )}
+                        {showEditButton && editableTask ? (
+                        <>
+                            <button onClick={handleSave} className='btnSubmit'>Сохранить</button>
+                            <button onClick={handleCancelEdit} className='btnSubmit' style={{ marginLeft: '30px' }}>Отменить</button>
+                        </>
+                    ) : (
+                        showEditButton && <button onClick={handleEdit} className='btnSubmit'>Редактировать</button>
+                    )}
                 </div>
             </div>
             <ToastContainer 
