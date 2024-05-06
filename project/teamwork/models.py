@@ -117,6 +117,7 @@ class Task(SoftDeleteModel):
                                  on_delete=models.CASCADE)
     status = models.CharField(max_length=128, choices=STATUS_CHOICES, verbose_name="Статус задачи")
     project = models.ForeignKey(Project, verbose_name="Проект", on_delete=models.CASCADE)
+    completed_date = models.DateTimeField(verbose_name="Дата фактического выполнения задачи", null=True, blank=True)
 
     def __str__(self):
         return self.name

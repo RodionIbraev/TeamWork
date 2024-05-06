@@ -1,6 +1,8 @@
 import base64
+import datetime
+
 from rest_framework import serializers
-from .models import Employee, Project, Task, EventScheduler, Comment
+from .models import Employee, Project, Task, EventScheduler, Comment, STATUS_CHOICES
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -59,11 +61,18 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = [
             "id", "name", "description", "deadline", "priority", "category", "executor", "status", "project",
-            "creator", "created_at"
+            "creator", "created_at", "completed_date"
         ]
         extra_kwargs = {
-            "created_at": {"read_only": True}
+            "created_at": {"read_only": True},
+            "completed_date": {"read_only": True}
         }
+
+    def update(self, instance, validated_data):
+        status = validated_data.get("status", None)
+        if status == STATUS_CHOICES[-1][0]:
+            instance.completed_date = datetime.datetime.now()
+        return super().update(instance, validated_data)
 
 
 class EventSchedulerSerializer(serializers.ModelSerializer):
