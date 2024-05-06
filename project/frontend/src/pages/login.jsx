@@ -43,7 +43,6 @@ export default function Login () {
             sessionStorage.setItem("accessToken", response.data["jwt_token"]);
         }
         catch(error) {
-            console.log("error", error.response?.data);
             if(error.response && error.response.data){
                 Object.keys(error.response.data).forEach(field => {
                     const errorMessage = error.response.data[field];

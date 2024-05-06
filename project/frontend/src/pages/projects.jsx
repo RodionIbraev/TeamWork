@@ -29,7 +29,6 @@ function Projects() {
                 });
                 setProjects(responseProjects.data);
             } catch (error) {
-                console.error('Error fetching projects data:', error);
             }
         }};
 
@@ -42,7 +41,6 @@ function Projects() {
               });
                 setEmployees(responseEmployees.data);
             } catch (error) {
-                console.error('не получилось:', error);
             }
         };
 
@@ -55,7 +53,6 @@ function Projects() {
               });
               setUserProfile(responseUserProfile.data);
           } catch (error) {
-              console.error('Error fetching user profile:', error);
           }
       };
 
@@ -102,11 +99,9 @@ function Projects() {
           setProjects(projects.filter(project => project.id !== selectedProject.id));
   
           toast.success("Вы удалили проект!");
-          console.log(`Проект "${selectedProject.name}" успешно удален!`);
 
           closeModal();
       } catch (error) {
-          console.error('Error deleting project:', error);
       }
   };
 

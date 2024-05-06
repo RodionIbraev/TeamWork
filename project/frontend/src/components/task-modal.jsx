@@ -61,7 +61,7 @@ const TaskModal = ({ task, formatDate, getEmployeeName, onClose }) => {
                     'token': sessionStorage.getItem('accessToken')
                 }
             });
-            console.log("Success!", response.data);
+
             toast.success("Задача успешно обновлена");
             setTimeout(() => {
                 reloadPage();

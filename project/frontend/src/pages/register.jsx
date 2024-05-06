@@ -23,7 +23,6 @@ export default function Register() {
                 const response = await axios.get('http://127.0.0.1:8000/get-post-names/');
                 setPostNames(response.data.post_names);
             } catch (error) {
-                console.error('Error fetching post names:', error);
             }
         };
 
@@ -65,10 +64,7 @@ export default function Register() {
                 navigate("/login");
             }, 3000);
 
-            console.log("Success!", response.data)
-
         } catch(error) {
-            console.log("Registration failed:", error.response?.data);
                 if (error.response && error.response.data) {
                     Object.keys(error.response.data).forEach(field => {
                     const errorMessage = error.response.data[field];

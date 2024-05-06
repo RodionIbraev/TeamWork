@@ -10,5 +10,10 @@ export const SiderbarData = [
         title: 'Создать проект',
         path: '/project-create',
         cName: 'nav-text'
+    },
+    {
+        title: 'Мои задачи',
+        path: '/user-tasks',
+        cName: 'nav-text'
     }
 ]

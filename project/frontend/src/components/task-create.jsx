@@ -92,14 +92,12 @@ const TaskCreate = ({onClose})=> {
                 }
             });
             
-            console.log("Success!", response.data);
             toast.success("Задача успешно создана");
             setTimeout(() => {
                 reloadPage();
             }, 2000);
             
         } catch (error) {
-            console.log("Error:", error.response?.data);
             if (error.response && error.response.data) {
                 Object.keys(error.response.data).forEach(field => {
                     const errorMessage = error.response.data[field];

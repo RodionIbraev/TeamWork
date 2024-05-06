@@ -10,6 +10,7 @@ import Projects from './pages/projects';
 import ProjectTasks from './pages/projectTasks';
 import ProjectCreate from './pages/project-create';
 import SideBar from './components/sideBar';
+import UserTasks from './pages/user-tasks';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path='/projects' element={<Projects />} />
           <Route path="/project/:projectId" element={<ProjectTasks />} />
           <Route path='/project-create' element={<ProjectCreate />} />
+          <Route path='/user-tasks' element={<UserTasks />} />
         </Routes>
         <Footer />
       </Router>

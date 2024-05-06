@@ -7,6 +7,7 @@ import { User } from 'phosphor-react';
 import { BsExclamationCircle, BsCalendar2Check } from "react-icons/bs";
 import { Helmet } from 'react-helmet';
 import TaskModal from '../components/task-modal.jsx';
+import { ToastContainer, toast } from 'react-toastify';
 
 function ProjectTasks() {
     const { projectId } = useParams();
@@ -27,7 +28,6 @@ function ProjectTasks() {
                 });
                 setStatusNames(response.data.status_names);
             } catch (error) {
-                console.error('Error fetching task choices:', error);
             }
         };
 
@@ -52,7 +52,6 @@ function ProjectTasks() {
                 setProject(responseProject.data);
                 setEmployees(responseEmployees.data);
             } catch (error) {
-                console.error('Error fetching project data:', error);
             }
         };
 
@@ -60,6 +59,34 @@ function ProjectTasks() {
             fetchProjectData();
         }
     }, [projectId]);
+
+    const handleExportToXLSX = async () => {
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/project/${projectId}/export/`, {
+                headers: {
+                    'token': sessionStorage.getItem("accessToken"),
+                },
+                responseType: 'blob'
+            });
+    
+            const projectTitle = project.name.replaceAll(' ', '_');
+            const fileName = `${projectTitle}_export.xlsx`; 
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+    
+            link.setAttribute('download', fileName);
+    
+            document.body.appendChild(link);
+            link.click();
+    
+            link.parentNode.removeChild(link);
+
+            toast.success("Файл загружен!");
+        } catch (error) {
+        }
+    };
 
     if (!project || statusNames.length === 0) {
         return <div>Loading...</div>;
@@ -90,7 +117,7 @@ function ProjectTasks() {
             });
             setSelectedTask({...response.data, task_id: taskId});
         } catch (error) {
-            console.error('Error fetching task data:', error);
+
         }
     };
 
@@ -113,7 +140,7 @@ function ProjectTasks() {
             <div className="task-btns">
                 <button className='task-btn'>Список сотрудников</button>
                 <button className='task-btn'>Экспорт в PDF</button>
-                <button className='task-btn'>Экспорт в XLSX</button>
+                <button className='task-btn' onClick={handleExportToXLSX}>Экспорт в XLSX</button>
                 <button className='task-btn' onClick={() => setShowTaskCreate(true)}>Создать задачу</button>
             </div>
             {showTaskCreate && (
@@ -157,6 +184,19 @@ function ProjectTasks() {
                     onClose={handleCloseModal}
                 />
             )}
+
+            <ToastContainer 
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </div>
     );
 }
