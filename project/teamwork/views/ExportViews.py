@@ -1,5 +1,6 @@
 import datetime
 from itertools import chain
+from urllib.parse import quote
 
 from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
@@ -7,7 +8,7 @@ from django.http import HttpResponse
 from rest_framework.views import APIView
 
 from teamwork.views.auxiliary import auth_required
-from teamwork.models import Project, Task, STATUS_CHOICES
+from teamwork.models import Project, Task, STATUS_CHOICES, CATEGORY_CHOICES
 
 
 class ExportToXLSXView(APIView):
@@ -67,10 +68,12 @@ class ExportToXLSXView(APIView):
                 ws.cell(data_row, col, value)
             data_row += 1
 
+        # results = self.get_tasks_result(chain(active_tasks, deleted_tasks))
         self.auto_column_size(ws)
 
         response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-        response["Content-Disposition"] = "attachment; filename=project_report.xlsx"
+        report_name = f"{project.name.replace(' ', '_')}_report.xlsx"
+        response["Content-Disposition"] = f'attachment; filename="{quote(report_name)}"'
         wb.save(response)
         return response
 
@@ -91,3 +94,17 @@ class ExportToXLSXView(APIView):
                     pass
 
             ws.column_dimensions[column].width = max_length + 5
+
+    @staticmethod
+    def get_tasks_result(tasks):
+        bags_count = tasks.filter(category=CATEGORY_CHOICES[0][0]).count()
+        completed_tasks_count = tasks.filter(category=STATUS_CHOICES[-1][0]).count()
+        completed_on_time_tasks_count = tasks.filter(category=STATUS_CHOICES[-1][0], deadline__gte=deleted_at).count()
+        results = {
+            "Итого задач": len(tasks),
+            "Багов": bags_count,
+            "Удалено": "",
+            "Выполнено": completed_tasks_count,
+            "Выполнено в срок": completed_on_time_tasks_count
+        }
+        return results
