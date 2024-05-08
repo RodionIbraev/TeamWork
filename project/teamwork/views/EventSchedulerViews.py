@@ -30,8 +30,9 @@ class EventSchedulerView(APIView):
         Добавление события
         """
         user = get_user(request)
-        request.data["employee"] = user
-        serializer = self.serializer_class(data=request.data)
+        req_data = request.data.copy()
+        req_data["employee"] = user.id
+        serializer = self.serializer_class(data=req_data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
