@@ -4,15 +4,13 @@ import logo from "../assets/logo.svg";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate, useLocation  } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { SignOut } from 'phosphor-react';
 
 export const Navbar = () => {
     const [fullName, setFullName] = useState("");
     const [isLoggedin, setLoggedin] = useState(false);
-    const [pageTitle, setPageTitle] = useState("");
     const navigate = useNavigate();
-    const location = useLocation();
 
     useEffect(() => {
         const checkLoggedInUser = async () => {
@@ -39,16 +37,7 @@ export const Navbar = () => {
 
         checkLoggedInUser();
 
-        setPageTitle(document.title);
-
-    const handleTitleChange = () => {
-        setPageTitle(document.title);
-    };
-
-    window.addEventListener('titlechange', handleTitleChange);
-
-    return () => window.removeEventListener('titlechange', handleTitleChange);
-}, [location.pathname, isLoggedin, fullName, pageTitle]);
+}, [isLoggedin, fullName]);
 
     const handleLogout = () => {
         sessionStorage.removeItem("accessToken");
@@ -64,10 +53,7 @@ export const Navbar = () => {
 
     return (
         <div className="navbar">
-            <div className="logo">
-                <img src={logo} alt="" />
-            </div>
-            <h1>{pageTitle}</h1>
+            <h1></h1>
 
             {isLoggedin && (
                 <div className="userInfo">

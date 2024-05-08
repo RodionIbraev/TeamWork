@@ -96,7 +96,7 @@ function ProjectTasks() {
     };
 
     if (!project || statusNames.length === 0) {
-        return <div>Loading...</div>;
+        return <div style={{color: 'var(--white-color)', marginTop: '400px'}}>Загрузка...</div>;
     }
 
     const formatDate = (dateString) => {
@@ -156,6 +156,7 @@ function ProjectTasks() {
             <Helmet>
                 <title>Задачи проекта "{project.name}"</title>
             </Helmet>
+            <h1>Задачи проекта "{project.name}"</h1>
             <div className="task-btns">
             <button className='task-btn' onClick={handleShowEmployeesModal}>Список сотрудников</button>
                 <button className='task-btn' onClick={handleExportToXLSX}>Экспорт в XLSX</button>

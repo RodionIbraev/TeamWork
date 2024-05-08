@@ -12,22 +12,26 @@ textarea:-webkit-autofill:focus,
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
-  border-bottom: 2px solid var(--black-color);
-  -webkit-text-fill-color: inherit;
+  border-bottom: 2px solid var(--white-color);
+  -webkit-text-fill-color: var(--white-color);
   -webkit-box-shadow: none;
   transition: background-color 5000s ease-in-out 0s;
 }
 
-
 .form {
-    background: rgb(107,87,245);
-    background: linear-gradient(180deg, rgba(107,87,245,1) 0%, rgba(148,237,250,1) 100%);
+    background: inherit;
+    backdrop-filter: blur(20px);
     padding: 0 50px 50px 50px;
     width: 400px;
     margin: 0 auto;
     margin-top: 20px;
     border-radius: 20px;
-    border: 5px solid var(--black-color);
+    border: 2px solid var(--white-color);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 200;
 }
 
 .inputs {
@@ -37,24 +41,30 @@ select:-webkit-autofill:focus {
 
 .inputs input {
     border: none;
-    border-bottom: 2px solid var(--black-color);
+    border-bottom: 2px solid var(--white-color);
     background-color: inherit;
     outline: none;
     width: 400px;
     font-size: 18px;
+    color: var(--white-color);
 }
 
 .inputs select {
     border: none;
-    border-bottom: 2px solid var(--black-color);
+    border-bottom: 2px solid var(--white-color);
     background-color: inherit;
     outline: none;
     width: 400px;
     font-size: 18px;
+    color: var(--white-color);
+}
+
+.inputs option {
+    background-color: var(--black-color);
 }
 
 .inputs label {
-    color: var(--black-color);
+    color: var(--white-color);
     font-size: 18px;
     font-weight: 700;
 }
@@ -63,8 +73,8 @@ select:-webkit-autofill:focus {
 .btnSubmit {
     width: 300px;
     height: 40px;
-    background-color: var(--black-color);
-    border: none;
+    background-color: inherit;
+    border: 2px solid var(--white-color);
     border-radius: 10px;
     color: var(--white-color);
     font-family: "Roboto", sans-serif;
@@ -75,13 +85,29 @@ select:-webkit-autofill:focus {
 }
 
 .btnSubmit:hover {
-    background-color: var(--violet-color);
+    background-color: var(--white-color);
+    color: var(--black-color);
     transform: scale(1.1);
 }
 
 .btnSubmit:focus {
-    background-color: var(--violet-color);
+    background-color: var(--white-color);
+    color: var(--black-color);
     transform: scale(1.1);
+}
+
+.close-log-reg {
+    position: absolute;
+    right: 50px;
+    color: var(--white-color);
+    top: 10px;
+    cursor: pointer;
+    transition: 200ms ease-in-out;
+}
+
+.close-log-reg:hover {
+    transform: scale(1.1);
+    color: var(--high-color);
 }
 
 

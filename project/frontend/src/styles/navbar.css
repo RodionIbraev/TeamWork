@@ -1,22 +1,9 @@
-* {
-    margin: 0;
-    padding: 0;
-}
- 
 .navbar {
-    min-height: 80px;
-    background-color: var(--black-color);
+    min-height: 40px;
+    background-color: inherit;
     position: relative;
     color: var(--white-color);
 }
-
-.navbar h1 {
-    font-size: 36px;
-    text-transform: uppercase;
-    font-weight: 400;
-    padding-top: 19px;
-}
-
 .logo {
     position: absolute;
     top: 15px;
@@ -43,5 +30,5 @@
     display: flex;
     position: absolute;
     right: 50px;
-    top: 28px;
+    top: 10px;
 }

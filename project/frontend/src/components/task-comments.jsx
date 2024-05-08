@@ -53,6 +53,7 @@ function TaskComments({ taskId, taskName, onClose, employees }) {
                     'token': sessionStorage.getItem("accessToken"),
                 }
             });
+            toast.success("Комментарий создан!");
             setComments([...comments, response.data]);
             setNewComment('');
             setIsCreatingComment(false);
@@ -99,8 +100,8 @@ function TaskComments({ taskId, taskName, onClose, employees }) {
     return (
         <div>
             {isOverlayVisible && <div className="overlay" onClick={closeModal} />}
-            <div className="task-modal">
-                <h2>Комментарии к задаче "{taskName}"</h2>
+            <div className="task-modal" style={{width: '800px'}}>
+                <h2 style={{color: 'var(--white-color)'}}>Комментарии к задаче "{taskName}"</h2>
                 <X size={30} onClick={onClose} className='close-task-window' />
                 {comments.map(comment => (
                     <div key={comment.id} className="comment-item">

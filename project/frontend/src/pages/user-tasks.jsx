@@ -108,10 +108,13 @@ function UserTasks() {
     };
 
     return (
-        <div className='project-tasks' style={{marginTop: '80px'}}>
+        <div className='project-tasks'>
             <Helmet>
                 <title>Ваши задачи</title>
             </Helmet>
+
+            <h1 style={{marginBottom: '50px'}}>ВАШИ ЗАДАЧИ</h1>
+
             <div className='status-card-all'>
                 {statusNames.map(status => (
                     <div key={status} className='status-card'>
@@ -159,7 +162,6 @@ function UserTasks() {
                     getEmployeeName={getEmployeeName}
                     onClose={handleCloseModal}
                     showEditButton={false}
-                    modalSize="small"
                 />
             )}
         </div>

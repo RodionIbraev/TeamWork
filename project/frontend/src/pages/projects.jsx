@@ -111,6 +111,7 @@ function Projects() {
                 <title>Просмотр проектов</title>
             </Helmet>
             {showOverlay && <div className="overlay" onClick={closeModal}></div>}
+            <h1>ПРОСМОТР ПРОЕКТОВ</h1>
             {projects.map(project => (
               <div key={project.id} className='project-card'>
                 <Link key={project.id} to={`/project/${project.id}`} className='project-link'>
@@ -132,7 +133,7 @@ function Projects() {
         {showModal && selectedProject && (
             <div className="modal">
                 <div className="modal-content">
-                    <p>Вы действительно хотите удалить проект "{selectedProject.name}"?</p>
+                    <h3>Вы действительно хотите удалить проект "{selectedProject.name}"?</h3>
                     <div className="modal-btns">
                       <button onClick={handleDeleteProject}>Да</button>
                       <button onClick={closeModal}>Нет</button>

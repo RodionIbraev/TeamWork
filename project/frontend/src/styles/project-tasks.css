@@ -15,8 +15,13 @@
     background-color: var(--white-color);
 }
 
+.project-tasks h1 {
+    color: var(--white-color);
+    text-transform: uppercase;
+}
+
 .status-card {
-    border: 5px solid var(--black-color);
+    border: 2px solid var(--white-color);
     border-radius: 25px;
     height: fit-content;
     padding-bottom: 25px;
@@ -36,9 +41,10 @@
     text-transform: uppercase;
     color: var(--white-color);
     background-color: var(--black-color);
-    border-radius: 10px 10px 0 0;
+    border-radius: 25px 25px 0 0;
     height: 35px;
     font-size: 24px;
+    padding-top: 5px;
 }
 
 .task-card {
@@ -79,8 +85,9 @@
 .task-btn {
     width: 200px;
     height: 40px;
-    background-color: var(--blue-color);
-    border: 2px solid var(--black-color);
+    color: var(--white-color);
+    background-color: inherit;
+    border: 2px solid var(--white-color);
     border-radius: 10px;
     font-size: 18px;
     margin: 20px 60px 20px 20px;
@@ -89,8 +96,8 @@
 }
 
 .task-btn:hover {
-    background-color: var(--violet-color);
-    color: var(--white-color);
+    background-color: var(--white-color);;
+    color: var(--black-color);
     transform: scale(1.1);
 }
 
@@ -107,6 +114,6 @@
 }
 
 .task-info-click svg:hover {
-    color: var(--violet-color);
+    opacity: 80%;
     transform: scale(1.1);
 }

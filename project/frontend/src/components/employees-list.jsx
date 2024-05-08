@@ -43,7 +43,7 @@ function EmployeesList({ projectId, onClose }) {
 
     const renderEmployeesByPost = (post) => {
         return employeesData.filter(employee => employee.post === post).map(employee => (
-            <div key={employee.id} style={{marginLeft: '20px'}}>
+            <div key={employee.id} style={{marginLeft: '20px', color: 'var(--white-color)'}}>
                 {employee.first_name} {employee.last_name}
             </div>
         ));
@@ -58,12 +58,12 @@ function EmployeesList({ projectId, onClose }) {
         <div>
         {isOverlayVisible && <div className="overlay" onClick={closeModal}/>}
         <div className="task-modal" style={{width: '350px', paddingBottom: '20px'}}>
-            <h2>Список сотрудников проекта</h2>
+            <h2 style={{color: 'var(--white-color)'}}>Список сотрудников проекта</h2>
             <X size={30} onClick={onClose} className='close-task-window' style={{right: '20px'}}/>
             {postNames.map(post => (
                 employeesData.some(employee => employee.post === post) && (
                     <div key={post} style={{textAlign: 'left', marginBottom: '10px'}}>
-                        <h3>{post}:</h3>
+                        <h3 style={{color: 'var(--white-color)'}}>{post}:</h3>
                         {renderEmployeesByPost(post)}
                     </div>
                 )

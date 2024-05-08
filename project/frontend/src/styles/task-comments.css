@@ -21,7 +21,7 @@
 
 .new-comment-btn {
     cursor: pointer;
-    color: var(--black-color);
+    color: var(--white-color);
     transition: 200ms ease-in-out;
     position: absolute;
     right: 50px;
@@ -37,12 +37,13 @@
     width: 835px;
     height: 50px;
     background-color: inherit;
-    border: 2px solid var(--black-color);
+    border: 2px solid var(--white-color);
     border-radius: 10px;
     outline: none;
     font-size: 18px;
     font-family: 'Roboto', sans-serif;
     padding: 5px;
+    color: var(--white-color);
 }
 
 .delete-comment-btn {

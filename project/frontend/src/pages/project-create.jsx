@@ -122,10 +122,13 @@ function ProjectCreate() {
     }
 
     return (
-        <div>
+        <div className='project-create'>
             <Helmet>
                 <title>Создание проекта</title>
             </Helmet>
+
+            <h1>СОЗДАНИЕ ПРОЕКТА</h1>
+
             <form method="post" className="form">
                 <div className="inputs">
                     <label htmlFor="name">Название:</label><br /><br />

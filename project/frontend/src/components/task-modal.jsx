@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useParams } from 'react-router-dom';
 
-const TaskModal = ({ task, formatDate, getEmployeeName, onClose, showEditButton, modalSize }) => {
+const TaskModal = ({ task, formatDate, getEmployeeName, onClose, showEditButton}) => {
     const { projectId } = useParams ();
     const [isOverlayVisible, setIsOverlayVisible] = useState(true);
     const [editableTask, setEditableTask] = useState(null);
@@ -14,10 +14,7 @@ const TaskModal = ({ task, formatDate, getEmployeeName, onClose, showEditButton,
     const [categories, setCategories] = useState([]);
     const [status, setStatus] = useState([]);
     const [executors, setExecutors] = useState([]);
-
-    const handleEdit = () => {
-        setEditableTask({ ...task });
-    };
+    const [modalClass, setModalClass] = useState('task-modal');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -157,16 +154,18 @@ const TaskModal = ({ task, formatDate, getEmployeeName, onClose, showEditButton,
 
     const handleCancelEdit = () => {
         setEditableTask(null);
+        setModalClass('task-modal');
     };
 
-    const modalStyle = {
-        width: modalSize === 'large' ? '850px' : '350px',
+    const handleEdit = () => {
+        setEditableTask({ ...task });
+        setModalClass('task-modal large');
     };
 
     return (
         <div>
             {isOverlayVisible && <div className="overlay" onClick={closeModal} />}
-            <div className="task-modal" style={modalStyle}>
+            <div className={modalClass}>
                 <div className="modal-content">
                     <X size={30} onClick={onClose} className='close-task-window'/>
                     <div className="inputs">
