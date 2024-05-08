@@ -9,6 +9,7 @@ import ProjectTasks from './pages/projectTasks';
 import ProjectCreate from './pages/project-create';
 import SideBar from './components/sideBar';
 import UserTasks from './pages/user-tasks';
+import EventCalendar from './pages/event-calendar';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/project/:projectId" element={<ProjectTasks />} />
           <Route path='/project-create' element={<ProjectCreate />} />
           <Route path='/user-tasks' element={<UserTasks />} />
+          <Route path='/event-calendar' element={<EventCalendar />} />
         </Routes>
         <Footer />
       </Router>

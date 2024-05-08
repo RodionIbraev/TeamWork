@@ -15,5 +15,10 @@ export const SiderbarData = [
         title: 'Мои задачи',
         path: '/user-tasks',
         cName: 'nav-text'
-    }
+    },
+    {
+        title: 'Календарь событий',
+        path: '/event-calendar',
+        cName: 'nav-text'
+    },
 ]

@@ -4,6 +4,22 @@
     color: var(--highest-color);
 }
 
+.form-project-create {
+    background: var(--gray-color);
+    backdrop-filter: blur(20px);
+    padding: 0 50px 50px 50px;
+    width: 400px;
+    margin: 0 auto;
+    margin-top: 20px;
+    border-radius: 20px;
+    border: 2px solid var(--white-color);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 200;
+}
+
 #description {
     resize: none;
     width: 390px;

@@ -28,7 +28,7 @@
 }
 
 .card-top {
-    background-color: var(--black-color);
+    background-color: var(--gray-color);
     border-radius: 25px 25px 0 0;
     border-bottom: 2px solid var(--white-color);
     display: flex;

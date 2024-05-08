@@ -129,7 +129,7 @@ function ProjectCreate() {
 
             <h1>СОЗДАНИЕ ПРОЕКТА</h1>
 
-            <form method="post" className="form">
+            <form method="post" className="form-project-create">
                 <div className="inputs">
                     <label htmlFor="name">Название:</label><br /><br />
                     <input type="text" name="name" id="name" value={formData.name} onChange={handleChange} required />
@@ -142,7 +142,7 @@ function ProjectCreate() {
                     <label htmlFor="employee">Сотрудники:</label><br /><br />
                     <select multiple name="employee" id="employee" value={formData.employee} onChange={handleSelectChange} required>
                         {employees.map(employee => (
-                            <option key={employee.id} value={employee.id}>
+                            <option key={employee.id} value={employee.id} style={{backgroundColor: 'var(--gray-color)'}}>
                                 {`${employee.first_name} ${employee.last_name}`}
                             </option>
                         ))}
