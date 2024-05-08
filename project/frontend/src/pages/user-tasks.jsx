@@ -6,8 +6,9 @@ import { PiProjectorScreen } from "react-icons/pi";
 import { FaInfoCircle, FaCommentDots } from "react-icons/fa";
 import { Helmet } from 'react-helmet';
 import TaskModal from '../components/task-modal.jsx';
+import TaskComments from '../components/task-comments.jsx';
 
-function ProjectTasks() {
+function UserTasks() {
     
     const [employees, setEmployees] = useState([]);
     const [statusNames, setStatusNames] = useState([]);
@@ -15,6 +16,8 @@ function ProjectTasks() {
     const [selectedTaskId, setSelectedTaskId] = useState(null);
     const [selectedTask, setSelectedTask] = useState(null);
     const [projects, setProjects] = useState([]);
+    const [selectedCommentTaskId, setSelectedCommentTaskId] = useState(null);
+    const [showCommentsModal, setShowCommentsModal] = useState(false);
 
     useEffect(() => {
         const fetchTaskData = async () => {
@@ -92,9 +95,16 @@ function ProjectTasks() {
         getTaskById(taskId);
     };
 
+    const handleCommentClick = (taskId) => {
+        setSelectedCommentTaskId(taskId);
+        setShowCommentsModal(true);
+    };
+
     const handleCloseModal = () => {
         setSelectedTaskId(null);
         setSelectedTask(null);
+        setSelectedCommentTaskId(null);
+        setShowCommentsModal(false);
     };
 
     return (
@@ -123,7 +133,7 @@ function ProjectTasks() {
                                         <p>{getProjectName(task.project)}</p>
                                     </div>
                                     <div className="task-info-click">
-                                        <FaCommentDots size={25}/>
+                                        <FaCommentDots size={25}onClick={() => handleCommentClick(task.id)} />
                                         <FaInfoCircle size={25} onClick={() => handleTaskClick(task.id)}/>
                                     </div>
                                 </div>
@@ -132,6 +142,15 @@ function ProjectTasks() {
                     </div>
                 ))}
             </div>
+
+            {showCommentsModal && selectedCommentTaskId && (
+                <TaskComments
+                    taskId={selectedCommentTaskId}
+                    taskName={userTasks.find(task => task.id === selectedCommentTaskId)?.name}
+                    onClose={handleCloseModal}
+                    employees={employees}
+                />
+            )}
 
             {selectedTaskId && (
                 <TaskModal
@@ -147,4 +166,4 @@ function ProjectTasks() {
     );
 }
 
-export default ProjectTasks;
+export default UserTasks;

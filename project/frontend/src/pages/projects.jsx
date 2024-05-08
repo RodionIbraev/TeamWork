@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Helmet } from 'react-helmet';
 import '../styles/projects.css'
-import { Trash } from 'phosphor-react';
+import { FaRegTrashAlt  } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -124,7 +124,7 @@ function Projects() {
                     <p>{project.description}</p>
                   </div>
                   {userProfile && userProfile.id === project.creator && (
-                    <Trash size={32} onClick={() => openModal(project)} className='project-delete'> </Trash>
+                    <FaRegTrashAlt size={32} onClick={() => openModal(project)} className='project-delete'> </FaRegTrashAlt>
                   )}
                   
               </div>
