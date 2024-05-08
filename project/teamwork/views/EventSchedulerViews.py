@@ -33,10 +33,9 @@ class EventSchedulerView(APIView):
         req_data = request.data.copy()
         req_data["employee"] = user.id
         serializer = self.serializer_class(data=req_data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
     @auth_required
     def patch(self, request, event_id=None):
