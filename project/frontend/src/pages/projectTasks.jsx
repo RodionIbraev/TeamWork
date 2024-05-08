@@ -8,6 +8,7 @@ import { BsExclamationCircle, BsCalendar2Check } from "react-icons/bs";
 import { FaInfoCircle, FaCommentDots } from "react-icons/fa";
 import { Helmet } from 'react-helmet';
 import TaskModal from '../components/task-modal.jsx';
+import TaskComments from '../components/task-comments.jsx';
 import { ToastContainer, toast } from 'react-toastify';
 
 function ProjectTasks() {
@@ -18,6 +19,9 @@ function ProjectTasks() {
     const [showTaskCreate, setShowTaskCreate] = useState(false);
     const [selectedTaskId, setSelectedTaskId] = useState(null);
     const [selectedTask, setSelectedTask] = useState(null);
+    const [selectedCommentTaskId, setSelectedCommentTaskId] = useState(null);
+    const [showCommentsModal, setShowCommentsModal] = useState(false);
+
 
     useEffect(() => {
         const fetchTaskChoices = async () => {
@@ -127,10 +131,17 @@ function ProjectTasks() {
         getTaskById(taskId);
     };
 
+    const handleCommentClick = (taskId) => {
+        setSelectedCommentTaskId(taskId);
+        setShowCommentsModal(true);
+    };
+
     const handleCloseModal = () => {
         setSelectedTaskId(null);
         setSelectedTask(null);
         setShowTaskCreate(null);
+        setSelectedCommentTaskId(null);
+        setShowCommentsModal(false);
     };
 
     return (
@@ -170,8 +181,8 @@ function ProjectTasks() {
                                         <p>{getEmployeeName(task.executor_id)}</p>
                                     </div>
                                     <div className="task-info-click">
-                                        <FaCommentDots size={25}/>
-                                        <FaInfoCircle size={25} onClick={() => handleTaskClick(task.id)}/>
+                                        <FaCommentDots size={25} onClick={() => handleCommentClick(task.id)} />
+                                        <FaInfoCircle size={25} onClick={() => handleTaskClick(task.id)} />
                                     </div>
                                 </div>
                             </div>
@@ -180,6 +191,14 @@ function ProjectTasks() {
                 ))}
             </div>
 
+            {showCommentsModal && selectedCommentTaskId && (
+                <TaskComments
+                    taskId={selectedCommentTaskId}
+                    taskName={project.tasks.find(task => task.id === selectedCommentTaskId)?.name}
+                    onClose={handleCloseModal}
+                    employees={employees}
+                />
+            )}
             {selectedTaskId && (
                 <TaskModal
                     task={selectedTask}
