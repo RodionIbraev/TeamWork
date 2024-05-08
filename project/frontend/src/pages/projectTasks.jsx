@@ -9,6 +9,7 @@ import { FaInfoCircle, FaCommentDots } from "react-icons/fa";
 import { Helmet } from 'react-helmet';
 import TaskModal from '../components/task-modal.jsx';
 import TaskComments from '../components/task-comments.jsx';
+import EmployeesList from '../components/employees-list.jsx';
 import { ToastContainer, toast } from 'react-toastify';
 
 function ProjectTasks() {
@@ -21,6 +22,7 @@ function ProjectTasks() {
     const [selectedTask, setSelectedTask] = useState(null);
     const [selectedCommentTaskId, setSelectedCommentTaskId] = useState(null);
     const [showCommentsModal, setShowCommentsModal] = useState(false);
+    const [showEmployeesList, setShowEmployeesList] = useState(false);
 
 
     useEffect(() => {
@@ -136,12 +138,17 @@ function ProjectTasks() {
         setShowCommentsModal(true);
     };
 
+    const handleShowEmployeesModal = () => {
+        setShowEmployeesList(true);
+    };
+
     const handleCloseModal = () => {
         setSelectedTaskId(null);
         setSelectedTask(null);
         setShowTaskCreate(null);
         setSelectedCommentTaskId(null);
         setShowCommentsModal(false);
+        setShowEmployeesList(false);
     };
 
     return (
@@ -150,7 +157,7 @@ function ProjectTasks() {
                 <title>Задачи проекта "{project.name}"</title>
             </Helmet>
             <div className="task-btns">
-                <button className='task-btn'>Список сотрудников</button>
+            <button className='task-btn' onClick={handleShowEmployeesModal}>Список сотрудников</button>
                 <button className='task-btn' onClick={handleExportToXLSX}>Экспорт в XLSX</button>
                 <button className='task-btn' onClick={() => setShowTaskCreate(true)}>Создать задачу</button>
             </div>
@@ -207,6 +214,13 @@ function ProjectTasks() {
                     onClose={handleCloseModal}
                     showEditButton={true}
                     modalSize="large"
+                />
+            )}
+
+            {showEmployeesList && (
+                <EmployeesList
+                    projectId={projectId}
+                    onClose={handleCloseModal}
                 />
             )}
 
