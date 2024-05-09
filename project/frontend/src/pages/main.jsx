@@ -5,17 +5,22 @@ import '../styles/main.css'
 import { Helmet } from "react-helmet";
 import Login from "../components/login";
 import Register from "../components/register";
+import { useNavigate } from "react-router-dom";
 
 export const Main = () => {
+    const navigate = useNavigate()
     const [showLogin, setShowLogin] = useState(false);
     const [showRegister, setShowRegister] = useState(false);
     useEffect(() => {
+        if (sessionStorage.getItem("accessToken")) {
+            navigate('/user-profile');
+        } else {
         document.body.classList.add('main');
     
         return () => {
           document.body.classList.remove('main');
         };
-      }, []);
+      }}, []);
 
     const handleCloseModal = () => {
         setShowLogin(false);

@@ -82,7 +82,7 @@ const TaskModal = ({ task, formatDate, getEmployeeName, onClose, showEditButton}
             if (name === 'description') {
                 return (
                     <textarea
-                        id='description-task'
+                        id='description-task-modal'
                         name={name}
                         value={editableTask[name]}
                         onChange={handleChange}

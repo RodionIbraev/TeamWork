@@ -19,7 +19,7 @@ function Projects() {
     useEffect(() => {
         const fetchProjects = async () => {
           if (!sessionStorage.getItem("accessToken")) {
-            navigate('/login');
+            navigate('/');
           } else {
             try {
                 const responseProjects = await axios.get('http://127.0.0.1:8000/projects/', {

@@ -9,7 +9,7 @@ export const UserProfile = () => {
 
     useEffect(() => {
         if (!sessionStorage.getItem("accessToken")) {
-            navigate('/login');
+            navigate('/');
           } else {
         const fetchData = async () => {
             try {

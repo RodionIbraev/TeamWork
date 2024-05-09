@@ -39,6 +39,11 @@ select:-webkit-autofill:focus {
     text-align: left;
 }
 
+.inputs-checkbox {
+    color: var(--white-color);
+    margin-top: 50px;
+}
+
 .inputs input {
     border: none;
     border-bottom: 2px solid var(--white-color);

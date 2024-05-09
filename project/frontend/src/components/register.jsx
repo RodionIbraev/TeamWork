@@ -3,10 +3,10 @@ import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/log-reg.css';
-import { Helmet } from "react-helmet";
 import { X } from 'phosphor-react'
 
 export default function Register({onClose}) {
+    const [isPersonalData, setIsPersonalData] = useState(false);
     const [isOverlayVisible, setIsOverlayVisible] = useState(true);
     const [postNames, setPostNames] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +26,8 @@ export default function Register({onClose}) {
         const fetchPostNames = async () => {
             try {
                 const response = await axios.get('http://127.0.0.1:8000/get-post-names/');
-                setPostNames(response.data.post_names);
+                const filteredPostNames = response.data.post_names.filter(name => name !== "Project manager");
+                setPostNames(filteredPostNames);
             } catch (error) {
             }
         };
@@ -35,10 +36,17 @@ export default function Register({onClose}) {
     }, []);
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
+        const { name, value, type, checked } = e.target;
+        const val = type === 'checkbox' ? checked : value;
+    
+        if (name === 'isPersonalData') {
+            setIsPersonalData(val);
+        } else {
+            setFormData({
+                ...formData,
+                [name]: val
+            });
+        }
     };
 
     const closeModal = () => {
@@ -48,6 +56,11 @@ export default function Register({onClose}) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!isPersonalData) {
+            toast.error("Для регистрации необходимо дать согласие на обработку персональных данных");
+            return;
+        }
 
         if (!formData.first_name || !formData.last_name || !formData.email || !formData.password || !formData.post) {
             toast.error("Пожалуйста, заполните все обязательные поля");
@@ -112,6 +125,10 @@ export default function Register({onClose}) {
                             <option key={index} value={name}>{name}</option>
                         ))}
                     </select>
+                </div>
+                <div className="inputs-checkbox">
+                    <input type="checkbox" name="isPersonalData" id="isPersonalData" checked={isPersonalData} onChange={handleChange} />
+                    <label htmlFor="isPersonalData">Даю согласие на обработку персональных данных</label><br />
                 </div>
                 <button type="submit" className="btnSubmit" disabled={isLoading} onClick={handleSubmit}>Зарегистрироваться</button>
             </form>
