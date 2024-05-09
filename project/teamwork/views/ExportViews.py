@@ -105,6 +105,7 @@ class ExportToXLSXView(APIView):
         data_row += 3
         ws.cell(header_row, 1, "Задачи проекта:")
         header_row += 1
+        data_row += 1
 
         for col, key in enumerate(tasks_data[0].keys(), start=1):
             ws.cell(header_row, col, key)

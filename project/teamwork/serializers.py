@@ -87,7 +87,7 @@ class EventSchedulerSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if data["time_begin"] > data["time_end"]:
-            raise serializers.ValidationError({"Дата начала": "Не может быть больше даты окончания"})
+            raise serializers.ValidationError({"Дата начала": "Дата начала не может быть больше даты окончания!"})
         return data
 
 
