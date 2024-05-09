@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'moment/locale/ru';
-import '../styles/event-calendar.css'
-import { X } from 'phosphor-react'
+import '../styles/event-calendar.css';
+import { X } from 'phosphor-react';
 
 moment.locale('ru');
 
@@ -35,6 +36,7 @@ const EventCalendar = () => {
     const [events, setEvents] = useState([]);
     const openModal = () => setShowModal(true);
     const closeModal = () => setShowModal(false);
+    const navigate = useNavigate();
     
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -55,9 +57,15 @@ const EventCalendar = () => {
             toast.error("Пожалуйста, заполните все обязательные поля");
             return;
         }
+
+        const formattedNewEvent = {
+            ...newEvent,
+            time_begin: new Date(newEvent.time_begin).toISOString(),
+            time_end: new Date(newEvent.time_end).toISOString()
+        };
     
         try {
-            const response = await axios.post(`http://127.0.0.1:8000/event-scheduler/create`, newEvent, {
+            const response = await axios.post(`http://127.0.0.1:8000/event-scheduler/create`, formattedNewEvent, {
                 headers: {
                     'token': sessionStorage.getItem("accessToken"),
                 }
@@ -82,6 +90,9 @@ const EventCalendar = () => {
         }
     };
     useEffect(() => {
+        if (!sessionStorage.getItem("accessToken")) {
+            navigate('/');
+        } else {
         const getEvents = async () => {
             try {
                 const response = await fetch('http://127.0.0.1:8000/event-scheduler/', {
@@ -99,7 +110,7 @@ const EventCalendar = () => {
         };
 
         getEvents();
-    }, []);
+    }}, []);
 
     const formattedEvents = events.map(event => ({
         id: event.id,

@@ -5,11 +5,12 @@ import { BsExclamationCircle, BsCalendar2Check } from "react-icons/bs";
 import { PiProjectorScreen } from "react-icons/pi";
 import { FaInfoCircle, FaCommentDots } from "react-icons/fa";
 import { Helmet } from 'react-helmet';
+import { useNavigate } from 'react-router-dom';
 import TaskModal from '../components/task-modal.jsx';
 import TaskComments from '../components/task-comments.jsx';
 
 function UserTasks() {
-    
+    const navigate = useNavigate();
     const [employees, setEmployees] = useState([]);
     const [statusNames, setStatusNames] = useState([]);
     const [userTasks, setUserTasks] = useState([]);
@@ -20,6 +21,9 @@ function UserTasks() {
     const [showCommentsModal, setShowCommentsModal] = useState(false);
 
     useEffect(() => {
+        if (!sessionStorage.getItem("accessToken")) {
+            navigate('/');
+        } else {
         const fetchTaskData = async () => {
             try {
                 const [responseStatusNames, responseEmployees, responseUserTasks, responseProjects] = await Promise.all([
@@ -54,7 +58,7 @@ function UserTasks() {
         };
 
         fetchTaskData();
-    }, []);
+    }}, []);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
