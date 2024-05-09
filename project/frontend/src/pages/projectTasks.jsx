@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import TaskCreate from '../components/task-create.jsx';
 import '../styles/project-tasks.css';
 import { User } from 'phosphor-react';
@@ -23,14 +23,10 @@ function ProjectTasks() {
     const [selectedCommentTaskId, setSelectedCommentTaskId] = useState(null);
     const [showCommentsModal, setShowCommentsModal] = useState(false);
     const [showEmployeesList, setShowEmployeesList] = useState(false);
-    const navigate = useNavigate();
 
 
     useEffect(() => {
         const fetchTaskChoices = async () => {
-            if (!sessionStorage.getItem("accessToken")) {
-                navigate('/');
-              } else {
             try {
                 const response = await axios.get('http://127.0.0.1:8000/get-task-choices/', {
                     headers: {
@@ -43,7 +39,7 @@ function ProjectTasks() {
         };
 
         fetchTaskChoices();
-    }}, []);
+    }, []);
 
     useEffect(() => {
         const fetchProjectData = async () => {
