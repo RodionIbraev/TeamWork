@@ -59,3 +59,8 @@
     color: var(--high-color);
     transform: scale(1.1);
 }
+
+.comment-item p{
+    max-width: 750px;
+    word-wrap: break-word;
+}

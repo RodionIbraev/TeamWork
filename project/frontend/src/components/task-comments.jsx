@@ -58,6 +58,16 @@ function TaskComments({ taskId, taskName, onClose, employees }) {
             setNewComment('');
             setIsCreatingComment(false);
         } catch (error) {
+            if (error.response && error.response.data) {
+                Object.keys(error.response.data).forEach(field => {
+                    const errorMessage = error.response.data[field];
+                    if (errorMessage && errorMessage.length > 0) {
+                        errorMessage.forEach(msg => {
+                            toast.error(msg);
+                        });
+                    }
+                });
+            }
         }
     };
 

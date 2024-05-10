@@ -18,10 +18,6 @@ export default function Register({onClose}) {
         post: ""
     });
 
-    const reloadPage = () => {
-        window.location.reload();
-    };
-
     useEffect(() => {
         const fetchPostNames = async () => {
             try {
@@ -78,7 +74,7 @@ export default function Register({onClose}) {
         
             toast.success("Вы успешно зарегистрировались! Пожалуйста, пройдите авторизацию");
             setTimeout(() => {
-                reloadPage();
+                onClose();
             }, 2000);
 
         } catch(error) {
@@ -121,6 +117,7 @@ export default function Register({onClose}) {
                 <div className="inputs">
                     <label htmlFor="post">Должность:</label><br />
                     <select name="post" id="post" value={formData.post} onChange={handleChange} required>
+                    <option value="" disabled selected>Выберите должность</option>
                         {postNames.map((name, index) => (
                             <option key={index} value={name}>{name}</option>
                         ))}
