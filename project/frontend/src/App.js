@@ -10,7 +10,8 @@ import ProjectCreate from './pages/project-create';
 import SideBar from './components/sideBar';
 import UserTasks from './pages/user-tasks';
 import EventCalendar from './pages/event-calendar';
-
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 function App() {
   return (
@@ -18,15 +19,17 @@ function App() {
       <Router>
         <Navbar />
         <SideBar />
-        <Routes>
-          <Route path='/' element={<Main />} />
-          <Route path='/user-profile' element={<UserProfile />} />
-          <Route path='/projects' element={<Projects />} />
-          <Route path="/project/:projectId" element={<ProjectTasks />} />
-          <Route path='/project-create' element={<ProjectCreate />} />
-          <Route path='/user-tasks' element={<UserTasks />} />
-          <Route path='/event-calendar' element={<EventCalendar />} />
-        </Routes>
+        <DndProvider backend={HTML5Backend}>
+          <Routes>
+            <Route path='/' element={<Main />} />
+            <Route path='/user-profile' element={<UserProfile />} />
+            <Route path='/projects' element={<Projects />} />
+            <Route path='/project-create' element={<ProjectCreate />} />
+            <Route path='/user-tasks' element={<UserTasks />} />
+            <Route path='/event-calendar' element={<EventCalendar />} />
+            <Route path="/project/:projectId" element={<ProjectTasks />} />
+          </Routes>
+        </DndProvider>
         <Footer />
       </Router>
     </div>

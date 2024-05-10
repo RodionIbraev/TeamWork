@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/project-tasks.css';
-import { BsExclamationCircle, BsCalendar2Check } from "react-icons/bs";
-import { PiProjectorScreen } from "react-icons/pi";
-import { FaInfoCircle, FaCommentDots } from "react-icons/fa";
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import TaskModal from '../components/task-modal.jsx';
 import TaskComments from '../components/task-comments.jsx';
+import { StatusItem } from '../components/status-item.jsx';
+import TaskCardUser from '../components/task-card-user.jsx';
 
 function UserTasks() {
     const navigate = useNavigate();
@@ -19,6 +18,7 @@ function UserTasks() {
     const [projects, setProjects] = useState([]);
     const [selectedCommentTaskId, setSelectedCommentTaskId] = useState(null);
     const [showCommentsModal, setShowCommentsModal] = useState(false);
+    
 
     useEffect(() => {
         if (!sessionStorage.getItem("accessToken")) {
@@ -59,6 +59,25 @@ function UserTasks() {
 
         fetchTaskData();
     }}, []);
+
+    const handleTaskMove = async (taskId, newStatus) => {
+        const updatedUserTasks = userTasks.map(task => {
+            if (task.id === taskId) {
+                return { ...task, status: newStatus };
+            }
+            return task;
+        });
+        setUserTasks(updatedUserTasks);
+
+        try {
+            await axios.patch(`http://127.0.0.1:8000/task/${taskId}/update/`, { status: newStatus }, {
+                headers: {
+                    'token': sessionStorage.getItem("accessToken"),
+                }
+            });
+        } catch (error) {
+        }
+    };
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -121,35 +140,21 @@ function UserTasks() {
 
             <div className='status-card-all'>
                 {statusNames.map(status => (
-                    <div key={status} className='status-card'>
-                        <div className='status-name'>{status}</div>
+                    <StatusItem key={status} status={status}>
                         {userTasks.filter(task => task.status === status).map(task => (
-                            <div key={task.id} className={task.priority === 'Важный' ? 'task-card high' : task.priority === 'Срочный' ? 'task-card highest' : 'task-card default'}>
-                                <h4>{task.name}</h4>
-                                <div className="task-info">
-                                    <div className="parent-element">
-                                        <BsCalendar2Check size={25} weight="bold" />
-                                        <p>{formatDate(task.deadline)}</p>
-                                    </div>
-                                    <div className="parent-element">
-                                        <BsExclamationCircle size={25} weight="bold" />
-                                        <p>{task.priority}</p>
-                                    </div>
-                                    <div className="parent-element">
-                                        <PiProjectorScreen size={25} weight="bold" />
-                                        <p>{getProjectName(task.project)}</p>
-                                    </div>
-                                    <div className="task-info-click">
-                                        <FaCommentDots size={25}onClick={() => handleCommentClick(task.id)} />
-                                        <FaInfoCircle size={25} onClick={() => handleTaskClick(task.id)}/>
-                                    </div>
-                                </div>
-                            </div>
+                           <TaskCardUser
+                           key={task.id}
+                           task={task}
+                           onTaskMove={handleTaskMove}
+                           handleCommentClick={handleCommentClick}
+                           handleTaskClick={handleTaskClick}
+                           formatDate={formatDate}
+                           getProjectName={getProjectName}
+                           />
                         ))}
-                    </div>
+                    </StatusItem>
                 ))}
             </div>
-
             {showCommentsModal && selectedCommentTaskId && (
                 <TaskComments
                     taskId={selectedCommentTaskId}

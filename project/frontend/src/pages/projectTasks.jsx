@@ -3,14 +3,13 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import TaskCreate from '../components/task-create.jsx';
 import '../styles/project-tasks.css';
-import { User } from 'phosphor-react';
-import { BsExclamationCircle, BsCalendar2Check } from "react-icons/bs";
-import { FaInfoCircle, FaCommentDots } from "react-icons/fa";
 import { Helmet } from 'react-helmet';
 import TaskModal from '../components/task-modal.jsx';
 import TaskComments from '../components/task-comments.jsx';
 import EmployeesList from '../components/employees-list.jsx';
 import { ToastContainer, toast } from 'react-toastify';
+import TaskCard from '../components/task-card.jsx';
+import { StatusItem } from '../components/status-item.jsx';
 
 function ProjectTasks() {
     const { projectId } = useParams();
@@ -23,6 +22,7 @@ function ProjectTasks() {
     const [selectedCommentTaskId, setSelectedCommentTaskId] = useState(null);
     const [showCommentsModal, setShowCommentsModal] = useState(false);
     const [showEmployeesList, setShowEmployeesList] = useState(false);
+    const [tasks, setTasks] = useState([]);
 
 
     useEffect(() => {
@@ -94,6 +94,30 @@ function ProjectTasks() {
         } catch (error) {
         }
     };
+
+    const handleTaskMove = async (taskId, newStatus) => {
+        const updatedTasks = project.tasks.map(task => {
+            if (task.id === taskId) {
+                return { ...task, status: newStatus };
+            }
+            return task;
+        });
+        
+        setProject({
+            ...project,
+            tasks: updatedTasks
+        });
+
+        try {
+            await axios.patch(`http://127.0.0.1:8000/task/${taskId}/update/`, { status: newStatus }, {
+                headers: {
+                    'token': sessionStorage.getItem("accessToken"),
+                }
+            });
+        } catch (error) {
+        }
+    };
+
 
     if (!project || statusNames.length === 0) {
         return <div style={{color: 'var(--white-color)', marginTop: '400px'}}>Загрузка...</div>;
@@ -170,32 +194,19 @@ function ProjectTasks() {
 
             <div className='status-card-all'>
                 {statusNames.map(status => (
-                    <div key={status} className='status-card'>
-                        <div className='status-name'>{status}</div>
+                    <StatusItem key={status} status={status}>
                         {project.tasks.filter(task => task.status === status).map(task => (
-                            <div key={task.id} className={task.priority === 'Важный' ? 'task-card high' : task.priority === 'Срочный' ? 'task-card highest' : 'task-card default'}>
-                                <h4>{task.name}</h4>
-                                <div className="task-info">
-                                    <div className="parent-element">
-                                        <BsCalendar2Check size={25} weight="bold" />
-                                        <p>{formatDate(task.deadline)}</p>
-                                    </div>
-                                    <div className="parent-element">
-                                        <BsExclamationCircle size={25} weight="bold" />
-                                        <p>{task.priority}</p>
-                                    </div>
-                                    <div className="parent-element">
-                                        <User size={25} weight="bold" />
-                                        <p>{getEmployeeName(task.executor_id)}</p>
-                                    </div>
-                                    <div className="task-info-click">
-                                        <FaCommentDots size={25} onClick={() => handleCommentClick(task.id)} />
-                                        <FaInfoCircle size={25} onClick={() => handleTaskClick(task.id)} />
-                                    </div>
-                                </div>
-                            </div>
+                           <TaskCard
+                           key={task.id}
+                           task={task}
+                           onTaskMove={handleTaskMove}
+                           getEmployeeName={getEmployeeName}
+                           handleCommentClick={handleCommentClick}
+                           handleTaskClick={handleTaskClick}
+                           formatDate={formatDate}
+                           />
                         ))}
-                    </div>
+                    </StatusItem>
                 ))}
             </div>
 
