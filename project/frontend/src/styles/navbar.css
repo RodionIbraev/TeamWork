@@ -2,7 +2,7 @@
     min-height: 40px;
     background-color: inherit;
     position: relative;
-    color: var(--white-color);
+    color: var(--blue-color);
 }
 .logo {
     position: absolute;
@@ -14,7 +14,7 @@
 .userInfo button {
     background-color: inherit;
     border: none;
-    color: var(--white-color);
+    color: var(--blue-color);
     cursor: pointer;
     transition: 300ms ease-in-out;
     margin-left: 20px;

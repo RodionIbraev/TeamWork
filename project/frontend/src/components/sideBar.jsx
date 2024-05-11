@@ -35,6 +35,7 @@ function SideBar() {
                     {SiderbarData.map((item, index) => (
                         <li key={index} className={item.cName}>
                             <Link to={item.path}>
+                                <div className="sidebar-icons">{item.icon}</div>
                                 <span>{item.title}</span>
                             </Link>
                         </li>

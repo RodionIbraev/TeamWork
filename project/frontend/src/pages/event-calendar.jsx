@@ -14,6 +14,7 @@ moment.locale('ru');
 
 const localizer = momentLocalizer(moment);
 
+
 const messages = {
     allDay: 'Весь день',
     previous: 'Назад',
@@ -28,15 +29,23 @@ const messages = {
 
 const EventCalendar = () => {
     const [showModal, setShowModal] = useState(false);
+    const [showOverlay, setShowOverlay] = useState(false);
     const [newEvent, setNewEvent] = useState({
         name: '',
         time_begin: '',
         time_end: ''
     });
     const [events, setEvents] = useState([]);
-    const openModal = () => setShowModal(true);
-    const closeModal = () => setShowModal(false);
+    const openModal = () => {
+        setShowModal(true);
+        setShowOverlay(true);
+    }
+    const closeModal = () => {
+        setShowModal(false);
+        setShowOverlay(false);
+    }
     const navigate = useNavigate();
+    
     
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -123,7 +132,8 @@ const EventCalendar = () => {
 
     return (
         <div>
-        <h1 style={{color: 'var(--white-color)'}}>КАЛЕНДАРЬ СОБЫТИЙ</h1>
+        {showOverlay && <div className="overlay" onClick={closeModal}></div>}
+        <h1 style={{color: 'var(--blue-color)'}}>КАЛЕНДАРЬ СОБЫТИЙ</h1>
         <div className='event-calendar'>
         <div style={{ height: '840px', width: '1500px', marginTop: '30px' }}>
             <Calendar
@@ -136,7 +146,8 @@ const EventCalendar = () => {
             />
         </div>
         <div className="event-calendar-list">
-        <button className='task-btn' onClick={openModal}>Создать событие</button>
+        <button className='calendar-btn' onClick={openModal}>Создать событие</button>
+            <div className="event-calendar-list-info">
             <h3>Предстоящие события:</h3>
                 <ul>
                     {upcomingEvents.map(event => (
@@ -148,6 +159,7 @@ const EventCalendar = () => {
                      </div>
                     ))}
                 </ul>
+                </div>
         </div>
         {showModal && (
             <div className="task-modal">

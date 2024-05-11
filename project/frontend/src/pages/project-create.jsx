@@ -142,7 +142,7 @@ function ProjectCreate() {
                     <label htmlFor="employee">Сотрудники:</label><br /><br />
                     <select multiple name="employee" id="employee" value={formData.employee} onChange={handleSelectChange} required>
                         {employees.map(employee => (
-                            <option key={employee.id} value={employee.id} style={{backgroundColor: 'var(--gray-color)'}}>
+                            <option key={employee.id} value={employee.id} style={{backgroundColor: 'var(--blue-color)'}}>
                                 {`${employee.first_name} ${employee.last_name}`}
                             </option>
                         ))}

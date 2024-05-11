@@ -65,7 +65,7 @@ select:-webkit-autofill:focus {
 }
 
 .inputs option {
-    background-color: var(--black-color);
+    background-color: var(--blue-color);
 }
 
 .inputs label {

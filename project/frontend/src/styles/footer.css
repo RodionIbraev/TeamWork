@@ -6,10 +6,10 @@
 .footer {
     min-height: 40px;
     min-width: 100%;
-    background-color: var(--black-color);
+    background-color: inherit;
     position: fixed;
     bottom: 0;
-    color: var(--white-color);
+    color: var(--blue-color);
     display: flex;
     align-items: center;
     justify-content: center;
