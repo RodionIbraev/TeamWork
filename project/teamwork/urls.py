@@ -20,7 +20,7 @@ from django.contrib import admin
 from .views import (
     RegisterView, LoginView, LogoutView, TaskView, ProjectView, UserProfileView, EventSchedulerView, GetEmployeesView,
     GetTaskChoicesView, GetPostNamesView, CommentView, ExportToXLSXView, CompletedTasksStatisticGraphic,
-    CompletedTasksByDayOfWeekGraphic
+    CompletedTasksByDayOfWeekGraphic, DocsForProjectView
 )
 
 urlpatterns = [
@@ -74,5 +74,12 @@ urlpatterns = [
         "project/<str:project_id>/completed-tasks-by-day-of-week-graphic/",
         CompletedTasksByDayOfWeekGraphic.as_view(),
         name="project-completed-tasks-by-day-of-week-graphic"
+    ),
+
+    #docs
+    path(
+        "project/<str:project_id>/documents/",
+        DocsForProjectView.as_view(),
+        name="project-documents"
     ),
 ]
