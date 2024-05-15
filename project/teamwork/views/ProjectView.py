@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db.models import Q
 from rest_framework import status
 from rest_framework.response import Response
@@ -7,6 +8,9 @@ from teamwork.serializers import ProjectSerializer
 from teamwork.views.auxiliary import get_user, auth_required
 
 from teamwork.models import Project, Task
+from teamwork.logic.yandex_api import YandexAPI
+
+TOKEN = getattr(settings, "YANDEX_TOKEN")
 
 
 class ProjectView(APIView):
@@ -62,3 +66,46 @@ class ProjectView(APIView):
                 "success_message": "Проект успешно удалён!",
             }
             return response
+
+
+class DocsForProjectView(APIView):
+    yandex = YandexAPI(TOKEN)
+
+    @staticmethod
+    def _get_project(project_id):
+        return Project.objects.get(id=project_id)
+
+    @auth_required
+    def get(self, request, project_id):
+        """
+        Просмотр и загрузка документов проекта
+        """
+        project = self._get_project(project_id)
+        file_list = self.yandex.get_file_list()
+        document_names = []
+        document_urls = []
+        for file in file_list["items"]:
+            if f"{project.name}" in file["path"]:
+                document_names.append(file["name"])
+                document_urls.append(file["file"])
+        response = Response()
+        response.data = dict(zip(document_names, document_urls))
+        return response
+
+    # @auth_required
+    # def post(self, request, project_id):
+    #     """
+    #     Добавление документа к проекту
+    #     """
+    #     project = self._get_project(project_id)
+    #     upload_file_to_yandex = self.yandex.upload_file_to_yandex(f"projects/{project.name}", )  # правильно задать имя
+    #     # файлу
+    #     return upload_file_to_yandex
+
+    # @auth_required
+    # def delete(self, request, project_id):
+    #     """
+    #     Удаление документа из проекта
+    #     """
+    #     file_list = self.yandex.delete_from_yandex(disk_file_path)
+    #     return None

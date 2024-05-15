@@ -33,7 +33,6 @@ class CompletedTasksStatisticGraphic(APIView, GraphicsMixin):
 
 
 class CompletedTasksByDayOfWeekGraphic(APIView, GraphicsMixin):
-
     @auth_required
     def get(self, request, project_id):
         completed_tasks = self._get_completed_tasks(project_id)

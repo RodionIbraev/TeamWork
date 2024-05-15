@@ -21,7 +21,6 @@ class GraphicsMixin:
         image_stream = BytesIO()
         plt.savefig(image_stream, format="png")
         plt.close()
-
         image_stream.seek(0)
         image_base64 = base64.b64encode(image_stream.getvalue()).decode("utf-8")
         return image_base64
