@@ -5,6 +5,7 @@ import { X } from 'phosphor-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useParams } from 'react-router-dom';
+import { FaRegTrashAlt } from "react-icons/fa";
 
 const TaskModal = ({ task, formatDate, getEmployeeName, onClose, showEditButton}) => {
     const { projectId } = useParams ();
@@ -74,6 +75,24 @@ const TaskModal = ({ task, formatDate, getEmployeeName, onClose, showEditButton}
                     toast.error(error.response.data);
                 }
             }
+        }
+    };
+
+    const handleDeleteTask = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.delete(`http://127.0.0.1:8000/task/${editableTask.task_id}/delete/`, {
+                headers: {
+                    'token': sessionStorage.getItem("accessToken"),
+                }
+            });
+            toast.success("Задача удалена!");
+            setTimeout(() => {
+                reloadPage();
+            }, 2000);
+        } catch (error) {
+            toast.error("Ошибка при удалении задачи");
         }
     };
 
@@ -214,6 +233,7 @@ const TaskModal = ({ task, formatDate, getEmployeeName, onClose, showEditButton}
                         <>
                             <button onClick={handleSave} className='btnSubmit'>Сохранить</button>
                             <button onClick={handleCancelEdit} className='btnSubmit' style={{ marginLeft: '30px' }}>Отменить</button>
+                            <FaRegTrashAlt size={30} onClick={handleDeleteTask} className='delete-task'/>
                         </>
                     ) : (
                         showEditButton && <button onClick={handleEdit} className='btnSubmit'>Редактировать</button>
