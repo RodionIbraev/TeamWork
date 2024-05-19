@@ -55,6 +55,10 @@ class YandexAPI:
         response = requests.delete(delete_file_url, headers=headers, params=params)
         if response.status_code == 204:
             response.data = {
-                "success_upload": "Документ успешно удалён!",
+                "success": "Документ успешно удалён!",
+            }
+        else:
+            response.data = {
+                "error": "Произошла ошибка, выполните удаление позже!",
             }
         return response

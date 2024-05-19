@@ -112,10 +112,12 @@ class DocsForProjectView(APIView):
     #     # файлу
     #     return upload_file_to_yandex
 
-    # @auth_required
-    # def delete(self, request, project_id):
-    #     """
-    #     Удаление документа из проекта
-    #     """
-    #     file_list = self.yandex.delete_from_yandex(disk_file_path)
-    #     return None
+    @auth_required
+    def delete(self, request, project_id):
+        """
+        Удаление документа из проекта
+        """
+        project = self._get_project(project_id)
+        disk_file_path = request.data["disk_file_path"]
+        response = self.yandex.delete_from_yandex(f"projects/{project.name}/{disk_file_path}")
+        return Response(data=response.data)
