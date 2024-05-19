@@ -82,14 +82,24 @@ class DocsForProjectView(APIView):
         """
         project = self._get_project(project_id)
         file_list = self.yandex.get_file_list()
-        document_names = []
-        document_urls = []
-        for file in file_list["items"]:
-            if f"{project.name}" in file["path"]:
-                document_names.append(file["name"])
-                document_urls.append(file["file"])
+        document_names_and_urls = {}
         response = Response()
-        response.data = dict(zip(document_names, document_urls))
+        if file_list:
+            for file in file_list.get("items", []):
+                if project.name in file.get("path", ""):
+                    document_names_and_urls[file["name"]] = file["file"]
+
+            if document_names_and_urls:
+                response.data = document_names_and_urls
+            else:
+                response.data = {
+                    "Уведомление": "У проекта нет документов"
+                }
+
+        else:
+            response.data = {
+                "Уведомление": "У проекта нет документов"
+            }
         return response
 
     # @auth_required
