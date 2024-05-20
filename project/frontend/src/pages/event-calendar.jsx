@@ -26,7 +26,8 @@ const messages = {
     agenda: 'События дня',
     date: 'Дата',
     time: 'Время',
-    event: 'Событие'
+    event: 'Событие',
+    noEventsInRange: 'В этом диапазоне нет событий',
 };
 
 const EventCalendar = () => {

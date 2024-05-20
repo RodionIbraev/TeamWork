@@ -10,6 +10,7 @@ import EmployeesList from '../components/employees-list.jsx';
 import { ToastContainer, toast } from 'react-toastify';
 import TaskCard from '../components/task-card.jsx';
 import { StatusItem } from '../components/status-item.jsx';
+import Graphs from '../components/graphs.jsx';
 
 function ProjectTasks() {
     const { projectId } = useParams();
@@ -22,8 +23,8 @@ function ProjectTasks() {
     const [selectedCommentTaskId, setSelectedCommentTaskId] = useState(null);
     const [showCommentsModal, setShowCommentsModal] = useState(false);
     const [showEmployeesList, setShowEmployeesList] = useState(false);
+    const [showGraphs, setShowGraphs] = useState(false);
     const [tasks, setTasks] = useState([]);
-
 
     useEffect(() => {
         const fetchTaskChoices = async () => {
@@ -166,6 +167,10 @@ function ProjectTasks() {
         setShowEmployeesList(true);
     };
 
+    const handleShowGraphs = () => {
+        setShowGraphs(true);
+    };
+
     const handleCloseModal = () => {
         setSelectedTaskId(null);
         setSelectedTask(null);
@@ -173,6 +178,7 @@ function ProjectTasks() {
         setSelectedCommentTaskId(null);
         setShowCommentsModal(false);
         setShowEmployeesList(false);
+        setShowGraphs(false);
     };
 
     return (
@@ -182,8 +188,11 @@ function ProjectTasks() {
             </Helmet>
             <h1>Задачи проекта "{project.name}"</h1>
             <div className="task-btns">
-            <button className='task-btn' onClick={handleShowEmployeesModal}>Список сотрудников</button>
+                <button className='task-btn' onClick={handleShowEmployeesModal}>Список сотрудников</button>
                 <button className='task-btn' onClick={handleExportToXLSX}>Экспорт в XLSX</button>
+                <button className='task-btn' >Выполненные задачи</button>
+                <button className='task-btn' onClick={handleShowGraphs}>Статистика</button>
+                <button className='task-btn' >Документы</button>
                 <button className='task-btn' onClick={() => setShowTaskCreate(true)}>Создать задачу</button>
             </div>
             {showTaskCreate && (
@@ -231,6 +240,13 @@ function ProjectTasks() {
 
             {showEmployeesList && (
                 <EmployeesList
+                    projectId={projectId}
+                    onClose={handleCloseModal}
+                />
+            )}
+
+            {showGraphs && (
+                <Graphs
                     projectId={projectId}
                     onClose={handleCloseModal}
                 />
