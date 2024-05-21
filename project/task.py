@@ -10,8 +10,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
 django.setup()
 from teamwork.models import Task, STATUS_CHOICES
 
-
-delay = 21600
+DELAY = 21600
 
 
 def delete_old_completed_tasks():
@@ -22,6 +21,6 @@ def delete_old_completed_tasks():
 
 
 while True:
-    time.sleep(delay)
+    time.sleep(DELAY)
     thread = threading.Thread(target=delete_old_completed_tasks)
     thread.start()

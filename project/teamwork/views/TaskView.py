@@ -88,7 +88,7 @@ class DeletedTaskView(APIView):
         """
         Просмотр удалённых задач проекта
         """
-        completed_tasks = Task.Task.deleted_objects.filter(project_id=project_id)
+        completed_tasks = Task.deleted_objects.filter(project_id=project_id)
         serializer = TaskSerializer(completed_tasks, many=True)
         return Response(serializer.data)
 
