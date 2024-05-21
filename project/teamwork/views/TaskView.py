@@ -97,7 +97,7 @@ class DeletedTaskView(APIView):
         """
         Восстановление удалённой задачи проекта
         """
-        task = self._get_task(task_id)
+        task = Task.deleted_objects.get(id=task_id)
         task.restore()
         task.status = STATUS_CHOICES[1][1]
         task.save()
