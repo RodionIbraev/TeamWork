@@ -53,7 +53,7 @@ urlpatterns = [
     path("user/tasks/", TaskView.as_view(), name="user-tasks"),
     path("<str:project_id>/tasks/deleted/", DeletedTaskView.as_view(), name="view-deleted-tasks"),
     path("<str:task_id>/task/restore/", DeletedTaskView.as_view(), name="restore-deleted-task"),
-    path("task/hard-delete/", DeletedTaskView.as_view(), name="task-hard-delete"),
+    path("task/<str:task_id>/hard-delete/", DeletedTaskView.as_view(), name="task-hard-delete"),
 
     #event-scheduler
     path("event-scheduler/", EventSchedulerView.as_view(), name="event-scheduler"),
