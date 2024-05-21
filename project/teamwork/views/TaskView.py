@@ -93,7 +93,7 @@ class DeletedTaskView(APIView):
         return Response(serializer.data)
 
     @auth_required
-    def post(self, request, task_id):
+    def patch(self, request, task_id):
         """
         Восстановление удалённой задачи проекта
         """

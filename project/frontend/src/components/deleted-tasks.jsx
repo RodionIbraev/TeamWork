@@ -52,7 +52,7 @@ function DeletedTasks({ projectId, onClose, formatDate, getEmployeeName,  }) {
 
     const handleRestoreTask = async (taskId) => {
         try {
-            const response = await axios.delete(`http://127.0.0.1:8000/${taskId}/task/restore/`, {
+            const response = await axios.patch(`http://127.0.0.1:8000/${taskId}/task/restore/`, "", {
                 headers: {
                     'token': sessionStorage.getItem("accessToken"),
                 }
