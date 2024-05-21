@@ -61,11 +61,12 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = [
             "id", "name", "description", "deadline", "priority", "category", "executor", "status", "project",
-            "creator", "created_at", "completed_date"
+            "creator", "created_at", "completed_date", "deleted_at"
         ]
         extra_kwargs = {
             "created_at": {"read_only": True},
-            "completed_date": {"read_only": True}
+            "completed_date": {"read_only": True},
+            "deleted_at": {"read_only": True}
         }
 
     def update(self, instance, validated_data):
