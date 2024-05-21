@@ -20,7 +20,7 @@ from django.contrib import admin
 from .views import (
     RegisterView, LoginView, LogoutView, TaskView, ProjectView, UserProfileView, EventSchedulerView, GetEmployeesView,
     GetTaskChoicesView, GetPostNamesView, CommentView, ExportToXLSXView, CompletedTasksStatisticGraphic,
-    CompletedTasksByDayOfWeekGraphic, DocsForProjectView
+    CompletedTasksByDayOfWeekGraphic, DocsForProjectView, DeletedTaskView
 )
 
 urlpatterns = [
@@ -51,6 +51,9 @@ urlpatterns = [
     path("task/<str:task_id>/delete/", TaskView.as_view(), name="task-delete"),
     path("task/<str:task_id>/update/", TaskView.as_view(), name="task-update"),
     path("user/tasks/", TaskView.as_view(), name="user-tasks"),
+    path("<str:project_id>/tasks/deleted/", DeletedTaskView.as_view(), name="view-deleted-tasks"),
+    path("<str:project_id>/task/restore/", DeletedTaskView.as_view(), name="restore-deleted-task"),
+    path("task/hard-delete/", DeletedTaskView.as_view(), name="task-hard-delete"),
 
     #event-scheduler
     path("event-scheduler/", EventSchedulerView.as_view(), name="event-scheduler"),

@@ -17,8 +17,8 @@ class CompletedTasksStatisticGraphic(APIView, GraphicsMixin):
         active_tasks = Task.objects.filter(project=project).select_related("creator", "executor")
         completed_tasks = self._get_completed_tasks(project_id)
         tasks_status = {
-            "Активыных задач": active_tasks.count(),
-            "Выполненных задач": completed_tasks.count()
+            "Активные": active_tasks.count(),
+            "Выполненные": completed_tasks.count()
         }
         labels = tasks_status.keys()
         sizes = tasks_status.values()

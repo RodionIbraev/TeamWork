@@ -38,7 +38,7 @@ class TaskView(APIView):
         """
         user = get_user(request)
         if task_id:
-            task = Task.objects.get(id=task_id)
+            task = self._get_task(task_id)
             serializer = TaskSerializer(task)
         else:
             tasks = Task.get_user_tasks(user)
@@ -71,3 +71,38 @@ class TaskView(APIView):
                 "success_message": "Задача успешно удалёна!",
             }
             return response
+
+
+class DeletedTaskView(APIView):
+    serializer_class = TaskSerializer
+
+    @staticmethod
+    def _get_task(task_id):
+        return Task.objects.get(id=task_id)
+
+    @auth_required
+    def get(self, request, project_id):
+        """
+        Просмотр удалённых задач проекта
+        """
+        completed_tasks = Task.Task.deleted_objects.filter(project_id=project_id)
+        serializer = TaskSerializer(completed_tasks, many=True)
+        return Response(serializer.data)
+
+    @auth_required
+    def post(self, request, task_id):
+        """
+        Восстановление удалённой задачи проекта
+        """
+        task = self._get_task(task_id)
+        task.restore()
+        return Response(data={"Успешное восстановление": "Задача успено восстановлена!"})
+
+    @auth_required
+    def delete(self, request, task_id):
+        """
+        Полное удаление задачи проекта
+        """
+        task = self._get_task(task_id)
+        task.hard_delete()
+        return Response(data={"Успешное удаление": "Задача удалена навсегда!"})
