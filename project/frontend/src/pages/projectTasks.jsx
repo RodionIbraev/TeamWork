@@ -11,6 +11,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import TaskCard from '../components/task-card.jsx';
 import { StatusItem } from '../components/status-item.jsx';
 import Graphs from '../components/graphs.jsx';
+import Documents from '../components/documents.jsx';
+import DeletedTasks from '../components/deleted-tasks.jsx';
 
 function ProjectTasks() {
     const { projectId } = useParams();
@@ -24,7 +26,8 @@ function ProjectTasks() {
     const [showCommentsModal, setShowCommentsModal] = useState(false);
     const [showEmployeesList, setShowEmployeesList] = useState(false);
     const [showGraphs, setShowGraphs] = useState(false);
-    const [tasks, setTasks] = useState([]);
+    const [showDocumnets, setShowDocuments] = useState(false);
+    const [showDeletedTasks, setShowDeletedTasks] = useState(false);
 
     useEffect(() => {
         const fetchTaskChoices = async () => {
@@ -137,7 +140,7 @@ function ProjectTasks() {
         if (executor) {
             return `${executor.first_name} ${executor.last_name}`;
         }
-        return 'Unknown';
+        return 'Неизвестный сотрудник';
     };
 
     const getTaskById = async (taskId) => {
@@ -171,6 +174,14 @@ function ProjectTasks() {
         setShowGraphs(true);
     };
 
+    const handleShowDocuments = () => {
+        setShowDocuments(true);
+    };
+
+    const handleShowDeletedTasks = () => {
+        setShowDeletedTasks(true)
+    };
+
     const handleCloseModal = () => {
         setSelectedTaskId(null);
         setSelectedTask(null);
@@ -179,6 +190,8 @@ function ProjectTasks() {
         setShowCommentsModal(false);
         setShowEmployeesList(false);
         setShowGraphs(false);
+        setShowDocuments(false);
+        setShowDeletedTasks(false)
     };
 
     return (
@@ -190,9 +203,9 @@ function ProjectTasks() {
             <div className="task-btns">
                 <button className='task-btn' onClick={handleShowEmployeesModal}>Список сотрудников</button>
                 <button className='task-btn' onClick={handleExportToXLSX}>Экспорт в XLSX</button>
-                <button className='task-btn' >Выполненные задачи</button>
+                <button className='task-btn' onClick={handleShowDeletedTasks}>Удаленные задачи</button>
                 <button className='task-btn' onClick={handleShowGraphs}>Статистика</button>
-                <button className='task-btn' >Документы</button>
+                <button className='task-btn' onClick={handleShowDocuments}>Документы</button>
                 <button className='task-btn' onClick={() => setShowTaskCreate(true)}>Создать задачу</button>
             </div>
             {showTaskCreate && (
@@ -252,6 +265,22 @@ function ProjectTasks() {
                 />
             )}
 
+            {showDocumnets && (
+                <Documents
+                    projectId={projectId}
+                    onClose={handleCloseModal}
+                />
+            )}
+
+            {showDeletedTasks &&  (
+                <DeletedTasks
+                    projectId={projectId}
+                    onClose={handleCloseModal}
+                    getEmployeeName={getEmployeeName}
+                    formatDate={formatDate}
+                />
+            )}
+
             <ToastContainer 
                 position="bottom-right"
                 autoClose={5000}
@@ -267,6 +296,5 @@ function ProjectTasks() {
         </div>
     );
 }
-
 
 export default ProjectTasks;

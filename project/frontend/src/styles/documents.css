@@ -1,0 +1,15 @@
+.documents li {
+    list-style-type: none;
+    font-size: 20px;
+    text-align: left;
+}
+
+.documents a {
+    color: var(--white-color);
+    transition: 200ms ease-in-out;
+}
+
+.documents a:hover {
+    color: var(--blue-color);
+    font-size: 20.5px;
+}
