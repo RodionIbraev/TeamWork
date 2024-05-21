@@ -38,7 +38,10 @@ class TaskView(APIView):
         """
         user = get_user(request)
         if task_id:
-            task = self._get_task(task_id)
+            try:
+                task = self._get_task(task_id)
+            except Task.DoesNotExist:
+                return Response(status=404, data={"message": f"Задача с id {task_id} не найдена!"})
             serializer = TaskSerializer(task)
         else:
             tasks = Task.get_user_tasks(user)
@@ -96,6 +99,8 @@ class DeletedTaskView(APIView):
         """
         task = self._get_task(task_id)
         task.restore()
+        task.status = STATUS_CHOICES[1][1]
+        task.save()
         return Response(data={"Успешное восстановление": "Задача успено восстановлена!"})
 
     @auth_required

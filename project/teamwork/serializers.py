@@ -72,6 +72,8 @@ class TaskSerializer(serializers.ModelSerializer):
         status = validated_data.get("status", None)
         if status == STATUS_CHOICES[-1][0]:
             instance.completed_date = datetime.datetime.now()
+        if status != STATUS_CHOICES[-1][0]:
+            instance.completed_date = None
         return super().update(instance, validated_data)
 
 
