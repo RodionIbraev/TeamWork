@@ -108,6 +108,6 @@ class DeletedTaskView(APIView):
         """
         Полное удаление задачи проекта
         """
-        task = self._get_task(task_id)
+        task = Task.deleted_objects.get(id=task_id)
         task.hard_delete()
         return Response(data={"Успешное удаление": "Задача удалена навсегда!"})
