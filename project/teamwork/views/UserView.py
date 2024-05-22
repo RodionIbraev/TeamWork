@@ -94,9 +94,11 @@ class UserProfileView(APIView):
         Редактирование профиля пользователя
         """
         user = get_user(request)
-        password_errors = check_password_complexity(request)
-        if password_errors:
-            return password_errors
+        password = request.data.get("password")
+        if password:
+            password_errors = check_password_complexity(request)
+            if password_errors:
+                return password_errors
 
         serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():

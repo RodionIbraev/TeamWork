@@ -21,26 +21,24 @@ export const UserProfile = () => {
         }
     };
 
-    const handlePhotoChange = (event) => {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            const base64String = event.target.result.split("base64,")[1];
-            setPhotoData(base64String);
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    };
+const handlePhotoChange = (event) => {
+    setPhotoData(event.target.files[0]);
+};
 
-    const handleUploadPhoto = async () => {
-        try {
-            await axios.patch('http://127.0.0.1:8000/user-profile/', { photo: photoData }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'token': sessionStorage.getItem("accessToken"),
-                }
-            });
-        } catch (error) {
-        }
-    };
+const handleUploadPhoto = async () => {
+    try {
+        const formData = new FormData();
+        formData.append('photo', photoData);
+
+        await axios.patch('http://127.0.0.1:8000/user-profile/', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'token': sessionStorage.getItem("accessToken"),
+            }
+        });
+    } catch (error) {
+    }
+};
 
     useEffect(() => {
         if (!sessionStorage.getItem("accessToken")) {
