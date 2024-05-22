@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django_softdelete.models import SoftDeleteModel
@@ -107,7 +109,7 @@ class Task(SoftDeleteModel):
     """
     name = models.CharField(max_length=128, verbose_name="Название")
     description = models.CharField(max_length=200, verbose_name="Описание")
-    created_at = models.DateTimeField(auto_now=True, verbose_name="Дата создания")
+    created_at = models.DateTimeField(verbose_name="Дата создания")
     deadline = models.DateTimeField(verbose_name="Дата окончания")
     priority = models.CharField(max_length=128, choices=PRIORITY_CHOICES, verbose_name="Приоритет")
     category = models.CharField(max_length=128, choices=CATEGORY_CHOICES, verbose_name="Тип задачи")
@@ -121,6 +123,11 @@ class Task(SoftDeleteModel):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.created_at = datetime.datetime.now()
+        super().save(*args, **kwargs)
 
     @staticmethod
     def get_user_tasks(user):

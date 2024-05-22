@@ -7,17 +7,19 @@ import matplotlib.pyplot as plt
 from rest_framework.views import APIView
 from teamwork.mixins.Mixins import GraphicsMixin
 from teamwork.views.auxiliary import auth_required
-from teamwork.models import Project, Task
+from teamwork.models import Project, Task, STATUS_CHOICES
 
 
 class CompletedTasksStatisticGraphic(APIView, GraphicsMixin):
     @auth_required
     def get(self, request, project_id):
         project = self._get_project(project_id)
-        active_tasks = Task.objects.filter(project=project).select_related("creator", "executor")
+        active_tasks = Task.objects.filter(project=project).exclude(
+            status=STATUS_CHOICES[-1][0]
+        ).select_related("creator", "executor")
         completed_tasks = self._get_completed_tasks(project_id)
         tasks_status = {
-            "Активные": active_tasks.count(),
+            "В работе": active_tasks.count(),
             "Выполненные": completed_tasks.count()
         }
         labels = tasks_status.keys()

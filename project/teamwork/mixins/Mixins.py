@@ -12,9 +12,8 @@ class GraphicsMixin:
 
     def _get_completed_tasks(self, project_id):
         project = self._get_project(project_id)
-        completed_deleted_tasks = Task.deleted_objects.filter(project=project, completed_date__isnull=False)
         completed_tasks = Task.objects.filter(project=project, completed_date__isnull=False)
-        return completed_deleted_tasks.union(completed_tasks)
+        return completed_tasks
 
     @staticmethod
     def do_image_base64():
