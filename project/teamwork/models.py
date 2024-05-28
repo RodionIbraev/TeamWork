@@ -48,7 +48,7 @@ class Employee(AbstractUser, SoftDeleteModel):  # для физического 
     email = models.EmailField(max_length=128, unique=True, verbose_name="Email")
     password = models.CharField(max_length=128, verbose_name="Пароль")
     post = models.CharField(max_length=128, choices=POSITION_CHOICES, verbose_name="Должность")
-    photo = models.ImageField(upload_to='photos/users', null=True, blank=True)
+    photo = models.ImageField(upload_to="static/photos/users", null=True, blank=True)
     username = None
 
     USERNAME_FIELD = 'email'

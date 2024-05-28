@@ -102,15 +102,16 @@ class DocsForProjectView(APIView):
             }
         return response
 
-    # @auth_required
-    # def post(self, request, project_id):
-    #     """
-    #     Добавление документа к проекту
-    #     """
-    #     project = self._get_project(project_id)
-    #     upload_file_to_yandex = self.yandex.upload_file_to_yandex(f"projects/{project.name}", )  # правильно задать имя
-    #     # файлу
-    #     return upload_file_to_yandex
+    @auth_required
+    def put(self, request, project_id):
+        """
+        Добавление документа к проекту
+        """
+        project = self._get_project(project_id)
+        file_name = request.data["file_name"]
+        file = request.data["file"]
+        upload_file_to_yandex = self.yandex.upload_file_to_yandex(f"projects/{project.name}", file)
+        return upload_file_to_yandex
 
     @auth_required
     def delete(self, request, project_id):
