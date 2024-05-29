@@ -90,4 +90,9 @@ urlpatterns = [
         DocsForProjectView.as_view(),
         name="project-documents-delete"
     ),
+    path(
+        "project/<str:project_id>/documents/load",
+        DocsForProjectView.as_view(),
+        name="project-documents-delete"
+    ),
 ]
