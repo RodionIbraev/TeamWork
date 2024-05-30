@@ -1,4 +1,5 @@
 import os
+from contextlib import closing
 
 from django.conf import settings
 from django.db.models import Q
@@ -94,14 +95,9 @@ class DocsForProjectView(APIView):
             if document_names_and_urls:
                 response.data = document_names_and_urls
             else:
-                response.data = {
-                    "Уведомление": "У проекта нет документов"
-                }
-
+                response.data = {}
         else:
-            response.data = {
-                "Уведомление": "У проекта нет документов"
-            }
+            response.data = {}
         return response
 
     @auth_required
@@ -112,15 +108,16 @@ class DocsForProjectView(APIView):
         project = self._get_project(project_id)
         file_name = request.data["file_name"]
         file = request.data["file"]
+        response = Response()
 
-        file_path = f"{file_name}"
-        with open(file_path, 'wb') as f:
+        # file_path = f"{file_name}"
+        with closing(open(file_name, 'wb')) as f:
             f.write(file.read())
 
-        upload_file_to_yandex = self.yandex.upload_file_to_yandex(f"projects/{project.name}", file_name)
-
-        os.remove(file_path)
-        return upload_file_to_yandex
+        upload_file_to_yandex = self.yandex.upload_file_to_yandex(f"projects/{project.name}/{file_name}", file_name)
+        # os.remove(file_path)
+        response.data = upload_file_to_yandex
+        return response
 
     @auth_required
     def delete(self, request, project_id):

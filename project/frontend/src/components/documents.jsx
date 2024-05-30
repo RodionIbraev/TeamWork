@@ -53,10 +53,10 @@ function Documents({ projectId, onClose }) {
     const uploadDocument = async (file) => {
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('file_name', '');
+        formData.append('file_name', file.name);
     
         try {
-            await axios.put(`http://127.0.0.1:8000/project/9/documents/load`, formData, {
+            await axios.put(`http://127.0.0.1:8000/project/${projectId}/documents/load`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'token': sessionStorage.getItem("accessToken"),
