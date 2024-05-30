@@ -1,3 +1,5 @@
+import os
+
 from django.conf import settings
 from django.db.models import Q
 from rest_framework import status
@@ -110,7 +112,14 @@ class DocsForProjectView(APIView):
         project = self._get_project(project_id)
         file_name = request.data["file_name"]
         file = request.data["file"]
-        upload_file_to_yandex = self.yandex.upload_file_to_yandex(f"projects/{project.name}", file)
+
+        file_path = f"{file_name}"
+        with open(file_path, 'wb') as f:
+            f.write(file.read())
+
+        upload_file_to_yandex = self.yandex.upload_file_to_yandex(f"projects/{project.name}", file_name)
+
+        os.remove(file_path)
         return upload_file_to_yandex
 
     @auth_required
