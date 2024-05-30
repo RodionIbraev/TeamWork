@@ -1,7 +1,6 @@
 .task-modal {
     min-width: 350px;
-    background: inherit;
-    backdrop-filter: blur(50px);
+    background: rgba(0, 0, 0, 0.5);
     padding: 0 50px 50px 50px;
     margin: 0 auto;
     margin-top: 20px;
@@ -13,6 +12,7 @@
     transform: translate(-50%, -50%);
     z-index: 200;
 }
+
 
 .inputs p {
     font-size: 18px;

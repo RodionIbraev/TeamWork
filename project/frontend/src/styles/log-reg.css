@@ -20,7 +20,7 @@ select:-webkit-autofill:focus {
 
 .form {
     background: inherit;
-    backdrop-filter: blur(20px);
+    background: rgba(0, 0, 0, 0.5);
     padding: 0 50px 50px 50px;
     width: 400px;
     margin: 0 auto;
@@ -78,7 +78,7 @@ select:-webkit-autofill:focus {
 .btnSubmit {
     width: 300px;
     height: 40px;
-    background-color: inherit;
+    background-color: rgba(0, 0, 0, 0);
     border: 2px solid var(--white-color);
     border-radius: 10px;
     color: var(--white-color);

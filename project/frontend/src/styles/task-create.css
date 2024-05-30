@@ -17,7 +17,7 @@
 
 .form-task {
     background: inherit;
-    backdrop-filter: blur(50px);
+    background: rgba(0, 0, 0, 0.5);
     padding: 0 50px 50px 50px;
     width: 850px;
     margin: 0 auto;
