@@ -30,6 +30,7 @@ export const UserProfile = () => {
 
     const fetchData = async () => {
         try {
+            // Запрос на получение профиля пользователя
             const response = await axios.get('http://127.0.0.1:8000/user-profile/', {
                 headers: {
                     'token': sessionStorage.getItem("accessToken"),
@@ -37,6 +38,7 @@ export const UserProfile = () => {
             });
 
             setUserData(response.data);
+            // Получение фотографии пользователя
             if (response.data.photo_data) {
                 setUserPhoto(`data:image/png;base64, ${response.data.photo_data}`);
             } else {
@@ -48,7 +50,9 @@ export const UserProfile = () => {
 
     const fetchPostNames = async () => {
         try {
+            // Запрос на получение списка должностей
             const response = await axios.get('http://127.0.0.1:8000/get-post-names/');
+            // Невозможность выбрать должность "Project manager"
             const filteredPostNames = response.data.post_names.filter(name => name !== "Project manager");
                 setPostNames(filteredPostNames);
         } catch (error) {
@@ -73,6 +77,7 @@ export const UserProfile = () => {
         setIsOverlayVisible(false);
     };
 
+    // Отправка обновленного профиля на сервер
     const handleSaveChanges = async () => {
         try {
             const formData = new FormData();
@@ -93,6 +98,7 @@ export const UserProfile = () => {
                 formData.append('post', selectedPost);
             }
         
+            // Запрос на редактирвоание профиля
             await axios.patch('http://127.0.0.1:8000/user-profile/update/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -105,6 +111,7 @@ export const UserProfile = () => {
                 handleModalClose();
             }, 2000);
         } catch (error) {
+            // Вывод ошибок с сервера
             if (error.response && error.response.data) {
                 Object.keys(error.response.data).forEach(field => {
                 const errorMessage = error.response.data[field];

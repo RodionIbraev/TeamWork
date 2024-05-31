@@ -10,6 +10,7 @@ import ProjectCreate from './pages/project-create';
 import SideBar from './components/sideBar';
 import UserTasks from './pages/user-tasks';
 import EventCalendar from './pages/event-calendar';
+import { PersonalData } from './pages/resonal-data';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -22,6 +23,7 @@ function App() {
         <DndProvider backend={HTML5Backend}>
           <Routes>
             <Route path='/' element={<Main />} />
+            <Route path='/personal-data' element={<PersonalData />} />
             <Route path='/user-profile' element={<UserProfile />} />
             <Route path='/projects' element={<Projects />} />
             <Route path='/project-create' element={<ProjectCreate />} />

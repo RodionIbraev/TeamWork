@@ -7,6 +7,7 @@ function EmployeesList({ projectId, onClose }) {
     const [postNames, setPostNames] = useState([]);
     const [isOverlayVisible, setIsOverlayVisible] = useState(true);
 
+    // Запрос на получение названий должностей
     useEffect(() => {
         const fetchPostNames = async () => {
             try {
@@ -24,6 +25,7 @@ function EmployeesList({ projectId, onClose }) {
         fetchPostNames();
     }, []);
 
+    // Запрос на получение сотрудников проекта
     useEffect(() => {
         const fetchEmployeesData = async () => {
             try {
@@ -41,6 +43,7 @@ function EmployeesList({ projectId, onClose }) {
         fetchEmployeesData();
     }, [projectId]);
 
+    // Фильтрация сотрудников по должности
     const renderEmployeesByPost = (post) => {
         return employeesData.filter(employee => employee.post === post).map(employee => (
             <div key={employee.id} style={{marginLeft: '20px', color: 'var(--white-color)'}}>

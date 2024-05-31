@@ -10,29 +10,32 @@ function Documents({ projectId, onClose }) {
     const [isOverlayVisible, setIsOverlayVisible] = useState(true);
     const [documents, setDocuments] = useState([]);
 
+    // Запрос на получение списка документов
+    const fetchDocuments = async () => {
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/project/${projectId}/documents/`, {
+                headers: {
+                    'token': sessionStorage.getItem("accessToken"),
+                }
+            });
+
+            const documentsArray = Object.keys(response.data).map(key => ({
+                name: key,
+                url: response.data[key]
+            }));
+
+            setDocuments(documentsArray);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    // Обноление списка документов
     useEffect(() => {
-        const fetchDocuments = async () => {
-            try {
-                const response = await axios.get(`http://127.0.0.1:8000/project/${projectId}/documents/`, {
-                    headers: {
-                        'token': sessionStorage.getItem("accessToken"),
-                    }
-                });
-
-                const documentsArray = Object.keys(response.data).map(key => ({
-                    name: key,
-                    url: response.data[key]
-                }));
-
-                setDocuments(documentsArray);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
         fetchDocuments();
     }, [projectId]);
 
+    // Запрос на удаление документа
     const deleteDocument = async (fileName) => {
         try {
             await axios.delete(`http://127.0.0.1:8000/project/${projectId}/documents/delete`, {
@@ -50,6 +53,7 @@ function Documents({ projectId, onClose }) {
         }
     };
 
+    // Запрос на загрузку документа
     const uploadDocument = async (file) => {
         const formData = new FormData();
         formData.append('file', file);
@@ -63,16 +67,23 @@ function Documents({ projectId, onClose }) {
                 }
             });
     
-            toast.success('Документ успешно загружен на сервер!');
+            fetchDocuments();
+            toast.success('Документ успешно загружен!');
+            setTimeout(() => {
+                reloadPage();
+            }, 2000);
         } catch (error) {
-            console.error(error);
-            toast.error('Ошибка при загрузке файла.');
+
         }
     };
     
     const closeModal = () => {
         setIsOverlayVisible(false);
         onClose();
+    };
+
+    const reloadPage = () => {
+        window.location.reload();
     };
 
     return (
@@ -84,14 +95,16 @@ function Documents({ projectId, onClose }) {
                 {documents.length > 0 && (
                     <ul className="documents">
                         {documents.map((document, index) => (
-                            <li key={index}>
+                            <li key={index} className='documents-item'>
                                 <a href={document.url} target="_blank" rel="noopener noreferrer">{document.name}</a>
-                                <FaRegTrashAlt size={20} onClick={() => deleteDocument(document.name)} />
+                                <FaRegTrashAlt size={20} onClick={() => deleteDocument(document.name)} className='document-delete'/>
                             </li>
                         ))}
                     </ul>
                 )}
-                <input type="file" onChange={(e) => uploadDocument(e.target.files[0])} />
+                <br /><br />
+                <label htmlFor="input-document" className="input-document">Добавить файл</label>
+                <input type="file" name='input-document' id='input-document' onChange={(e) => uploadDocument(e.target.files[0])} style={{ display: 'none' }}/>
             </div>
         </div>
     );

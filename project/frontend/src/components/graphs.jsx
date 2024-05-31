@@ -7,6 +7,7 @@ function Graphs({ projectId, onClose }) {
     const [graphicImage, setGraphicImage] = useState(null);
     const [dayOfWeekGraphic, setDayOfWeekGraphic] = useState(null);
 
+    // Запрос на получение графика выполненных задача
     useEffect(() => {
         const fetchCompletedTasksGraphic = async () => {
             try {
@@ -22,6 +23,7 @@ function Graphs({ projectId, onClose }) {
             }
         };
 
+        // Запрос на получение графика выполненных задач по дням недели
         const fetchDayOfWeekGraphic = async () => {
             try {
                 const response = await axios.get(`http://127.0.0.1:8000/project/${projectId}/completed-tasks-by-day-of-week-graphic/`, {

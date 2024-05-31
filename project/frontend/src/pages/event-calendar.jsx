@@ -15,6 +15,7 @@ moment.locale('ru');
 
 const localizer = momentLocalizer(moment);
 
+// Перевод календаря на русский язык
 const messages = {
     allDay: 'Весь день',
     previous: 'Назад',
@@ -74,95 +75,13 @@ const EventCalendar = () => {
         openModal();
     };
 
-    const handleUpdateEvent = async () => {
-        try {
-            const response = await axios.patch(`http://127.0.0.1:8000/event-scheduler/${newEvent.id}/update/`, newEvent, {
-                headers: {
-                    'token': sessionStorage.getItem("accessToken"),
-                }
-            });
-
-            toast.success("Событие обновлено!");
-            setTimeout(() => {
-                reloadPage();
-            }, 2000);
-
-        } catch (error) {
-            if (error.response && error.response.data) {
-                Object.keys(error.response.data).forEach(field => {
-                    const errorMessage = error.response.data[field];
-                    if (errorMessage && errorMessage.length > 0) {
-                        errorMessage.forEach(msg => {
-                            toast.error(msg);
-                        });
-                    }
-                });
-            }
-        }
-    };
-
-    const handleCreateEvent = async (e) => {
-        e.preventDefault();
-
-        if (!newEvent.name || !newEvent.time_begin || !newEvent.time_end) {
-            toast.error("Пожалуйста, заполните все обязательные поля");
-            return;
-        }
-
-        const formattedNewEvent = {
-            ...newEvent,
-            time_begin: new Date(newEvent.time_begin).toISOString(),
-            time_end: new Date(newEvent.time_end).toISOString()
-        };
-
-        try {
-            const response = await axios.post(`http://127.0.0.1:8000/event-scheduler/create`, formattedNewEvent, {
-                headers: {
-                    'token': sessionStorage.getItem("accessToken"),
-                }
-            });
-
-            toast.success("Событие создано!");
-            setTimeout(() => {
-                reloadPage();
-            }, 2000);
-
-        } catch (error) {
-            if (error.response && error.response.data) {
-                Object.keys(error.response.data).forEach(field => {
-                    const errorMessage = error.response.data[field];
-                    if (errorMessage && errorMessage.length > 0) {
-                        errorMessage.forEach(msg => {
-                            toast.error(msg);
-                        });
-                    }
-                });
-            }
-        }
-    };
-
-    const handleDeleteEvent = async (eventId) => {
-        try {
-            const response = await axios.delete(`http://127.0.0.1:8000/event-scheduler/${eventId}/delete/`, {
-                headers: {
-                    'token': sessionStorage.getItem("accessToken"),
-                }
-            });
-            toast.success("Событие удалено!");
-            setTimeout(() => {
-                reloadPage();
-            }, 2000);
-        } catch (error) {
-            toast.error("Ошибка при удалении события");
-        }
-    };
-
     useEffect(() => {
         if (!sessionStorage.getItem("accessToken")) {
             navigate('/');
         } else {
             const getEvents = async () => {
                 try {
+                    // Запрос на получение списка событий
                     const response = await fetch('http://127.0.0.1:8000/event-scheduler/', {
                         headers: {
                             'token': sessionStorage.getItem("accessToken"),
@@ -181,6 +100,98 @@ const EventCalendar = () => {
         }
     }, []);
 
+    const handleUpdateEvent = async () => {
+        try {
+            // Запрос на обновление события
+            const response = await axios.patch(`http://127.0.0.1:8000/event-scheduler/${newEvent.id}/update/`, newEvent, {
+                headers: {
+                    'token': sessionStorage.getItem("accessToken"),
+                }
+            });
+
+            toast.success("Событие обновлено!");
+            setTimeout(() => {
+                reloadPage();
+            }, 2000);
+
+        } catch (error) {
+            // Вывод ошибок с сервера
+            if (error.response && error.response.data) {
+                Object.keys(error.response.data).forEach(field => {
+                    const errorMessage = error.response.data[field];
+                    if (errorMessage && errorMessage.length > 0) {
+                        errorMessage.forEach(msg => {
+                            toast.error(msg);
+                        });
+                    }
+                });
+            }
+        }
+    };
+
+    // Отправка нового события на сервера
+    const handleCreateEvent = async (e) => {
+        e.preventDefault();
+
+        // Обязательные поля
+        if (!newEvent.name || !newEvent.time_begin || !newEvent.time_end) {
+            toast.error("Пожалуйста, заполните все обязательные поля");
+            return;
+        }
+
+        // Форматирование даты в стандарт ISO
+        const formattedNewEvent = {
+            ...newEvent,
+            time_begin: new Date(newEvent.time_begin).toISOString(),
+            time_end: new Date(newEvent.time_end).toISOString()
+        };
+
+        try {
+            // Запрос на создание события
+            const response = await axios.post(`http://127.0.0.1:8000/event-scheduler/create`, formattedNewEvent, {
+                headers: {
+                    'token': sessionStorage.getItem("accessToken"),
+                }
+            });
+
+            toast.success("Событие создано!");
+            setTimeout(() => {
+                reloadPage();
+            }, 2000);
+
+        } catch (error) {
+            // Вывод ошибок с сервера
+            if (error.response && error.response.data) {
+                Object.keys(error.response.data).forEach(field => {
+                    const errorMessage = error.response.data[field];
+                    if (errorMessage && errorMessage.length > 0) {
+                        errorMessage.forEach(msg => {
+                            toast.error(msg);
+                        });
+                    }
+                });
+            }
+        }
+    };
+
+    const handleDeleteEvent = async (eventId) => {
+        try {
+            // Запрос на удаление события
+            const response = await axios.delete(`http://127.0.0.1:8000/event-scheduler/${eventId}/delete/`, {
+                headers: {
+                    'token': sessionStorage.getItem("accessToken"),
+                }
+            });
+            toast.success("Событие удалено!");
+            setTimeout(() => {
+                reloadPage();
+            }, 2000);
+        } catch (error) {
+            toast.error("Ошибка при удалении события");
+        }
+    };
+
+    // Вывод списка предстоящих событий
     const formattedEvents = events.map(event => ({
         id: event.id,
         title: event.name,

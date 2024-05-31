@@ -4,6 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/log-reg.css';
 import { X } from 'phosphor-react'
+import { Link } from "react-router-dom";
 
 export default function Register({onClose}) {
     const [isPersonalData, setIsPersonalData] = useState(false);
@@ -19,6 +20,7 @@ export default function Register({onClose}) {
     });
 
     useEffect(() => {
+        // Запрос на получение списка должностей
         const fetchPostNames = async () => {
             try {
                 const response = await axios.get('http://127.0.0.1:8000/get-post-names/');
@@ -31,6 +33,7 @@ export default function Register({onClose}) {
         fetchPostNames();
     }, []);
 
+    // Обработка изменения формы
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         const val = type === 'checkbox' ? checked : value;
@@ -50,9 +53,11 @@ export default function Register({onClose}) {
         onClose();
     };
 
+    // Отправка формы на сервер
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Проверка обязательных полей
         if (!isPersonalData) {
             toast.error("Для регистрации необходимо дать согласие на обработку персональных данных");
             return;
@@ -70,6 +75,7 @@ export default function Register({onClose}) {
         setIsLoading(true);
 
         try {
+            // Запрос на регистрацию
             const response = await axios.post("http://127.0.0.1:8000/register/", formData);
         
             toast.success("Вы успешно зарегистрировались! Пожалуйста, пройдите авторизацию");
@@ -78,6 +84,7 @@ export default function Register({onClose}) {
             }, 2000);
 
         } catch(error) {
+                // Вывод ошибок с сервера
                 if (error.response && error.response.data) {
                     Object.keys(error.response.data).forEach(field => {
                     const errorMessage = error.response.data[field];
@@ -125,7 +132,9 @@ export default function Register({onClose}) {
                 </div>
                 <div className="inputs-checkbox">
                     <input type="checkbox" name="isPersonalData" id="isPersonalData" checked={isPersonalData} onChange={handleChange} />
-                    <label htmlFor="isPersonalData">Даю согласие на обработку персональных данных</label><br />
+                    <label htmlFor="isPersonalData">
+                        <Link to="/personal-data" target="blank" className="personal-data-link">Даю согласие на обработку персональных данных</Link>
+                    </label><br />
                 </div>
                 <button type="submit" className="btnSubmit" disabled={isLoading} onClick={handleSubmit}>Зарегистрироваться</button>
             </form>

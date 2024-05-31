@@ -41,12 +41,12 @@
     position: absolute;
     right: 50px;
     bottom: 55px;
-    color: var(--high-color);
+    color: var(--highest-color);
     transition: 200ms ease-in-out;
     cursor: pointer;
 }
 
 .delete-task:hover {
     transform: scale(1.1);
-    color: var(--highest-color);
+    color: var(--high-color);
 }

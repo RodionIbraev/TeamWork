@@ -15,6 +15,7 @@ export default function Login ({onClose}) {
         password:"",
     });
 
+    // Изменения в полях формы
     const handleChange = (e) =>{
         setFormData({
             ...formData,
@@ -22,6 +23,7 @@ export default function Login ({onClose}) {
         })
     };
 
+    // Отправка формы на сервер
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(isLoading){
@@ -30,6 +32,7 @@ export default function Login ({onClose}) {
 
         setIsLoading(true);
 
+        // Запрос на авторизацию
         try{
             const response = await axios.post("http://127.0.0.1:8000/login/", formData)
             toast.success("Вы успешно вошли в систему!");
@@ -41,6 +44,7 @@ export default function Login ({onClose}) {
             sessionStorage.setItem("accessToken", response.data["jwt_token"]);
         }
         catch(error) {
+            // Вывод ошибок с сервера
             if(error.response && error.response.data){
                 Object.keys(error.response.data).forEach(field => {
                     const errorMessage = error.response.data[field];

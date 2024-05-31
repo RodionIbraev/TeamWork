@@ -115,4 +115,14 @@ select:-webkit-autofill:focus {
     color: var(--high-color);
 }
 
+.personal-data-link {
+    color: var(--white-color);
+    transition: 200ms ease-in-out;
+}
+
+.personal-data-link:hover {
+    color: var(--blue-color);
+    transform: scale(1.1);
+}
+
 

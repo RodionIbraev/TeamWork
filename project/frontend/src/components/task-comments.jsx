@@ -15,6 +15,7 @@ function TaskComments({ taskId, taskName, onClose, employees }) {
     const [userProfile, setUserProfile] = useState(null);
 
     useEffect(() => {
+        // Запрос на отображение комментариев
         const fetchComments = async () => {
             try {
                 const response = await axios.get(`http://127.0.0.1:8000/task/${taskId}/comments`, {
@@ -29,6 +30,7 @@ function TaskComments({ taskId, taskName, onClose, employees }) {
 
         const fetchUserProfile = async () => {
             try {
+                // Запрос на получение профиля пользователя
                 const responseUserProfile = await axios.get('http://127.0.0.1:8000/user-profile/', {
                     headers: {
                         'token': sessionStorage.getItem("accessToken"),
@@ -45,6 +47,7 @@ function TaskComments({ taskId, taskName, onClose, employees }) {
 
     const handleSaveComment = async () => {
         try {
+            // Запрос на создание комментария
             const response = await axios.post(`http://127.0.0.1:8000/task/${taskId}/comment/create`, {
                 description: newComment,
                 task: taskId
@@ -58,6 +61,7 @@ function TaskComments({ taskId, taskName, onClose, employees }) {
             setNewComment('');
             setIsCreatingComment(false);
         } catch (error) {
+            // Вывод ошибок с сервера
             if (error.response && error.response.data) {
                 Object.keys(error.response.data).forEach(field => {
                     const errorMessage = error.response.data[field];
@@ -73,6 +77,7 @@ function TaskComments({ taskId, taskName, onClose, employees }) {
 
     const handleDeleteComment = async (commentId) => {
         try {
+            // Запрос на удаление комментария
             await axios.delete(`http://127.0.0.1:8000/comment/${commentId}/delete`, {
                 headers: {
                     'token': sessionStorage.getItem("accessToken"),
@@ -85,6 +90,7 @@ function TaskComments({ taskId, taskName, onClose, employees }) {
         }
     };
 
+    // Получение имени и фамилии автора комментария
     const getEmployeeName = (authorId) => {
         const author = employees.find(employee => employee.id === authorId);
         if (author) {
@@ -115,7 +121,7 @@ function TaskComments({ taskId, taskName, onClose, employees }) {
                 <X size={30} onClick={onClose} className='close-task-window' />
                 {comments.map(comment => (
                     <div key={comment.id} className="comment-item">
-                        <p>{comment.description}</p>
+                        <p><strong>{comment.description}</strong></p>
                         <div className="comment-info">
                             <p>Автор: {getEmployeeName(comment.author, employees)}</p>
                             <p>Дата создания: {new Date(comment.created_at).toLocaleString()}</p>

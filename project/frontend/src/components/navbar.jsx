@@ -3,15 +3,20 @@ import "../styles/navbar.css";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, } from 'react-router-dom';
 import { SignOut } from 'phosphor-react';
 
 export const Navbar = () => {
     const [fullName, setFullName] = useState("");
     const [isLoggedin, setLoggedin] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+    const hideNavbar = ['/login', '/register', '/', '/personal-data'].includes(location.pathname);
 
     useEffect(() => {
+        if (hideNavbar) {
+            return () => {}
+        }
         const checkLoggedInUser = async () => {
             const token = sessionStorage.getItem("accessToken");
             if (token) {
@@ -21,6 +26,7 @@ export const Navbar = () => {
                             'token': token,
                         }
                     };
+                    // Запрос на получение имени и фамилии пользователя
                     const response = await axios.get("http://127.0.0.1:8000/user-profile/", config);
                     setLoggedin(true);
                     setFullName(`${response.data.first_name} ${response.data.last_name}`);
@@ -38,6 +44,7 @@ export const Navbar = () => {
 
 }, [isLoggedin, fullName]);
 
+    // Выход из системы
     const handleLogout = () => {
         sessionStorage.removeItem("accessToken");
         setFullName("");

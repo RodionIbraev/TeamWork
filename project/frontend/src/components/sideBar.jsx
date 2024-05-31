@@ -8,7 +8,7 @@ function SideBar() {
     const location = useLocation();
     const [showMenu, setShowMenu] = useState(false);
 
-    const hideSidebar = ['/login', '/register', '/'].includes(location.pathname);
+    const hideSidebar = ['/login', '/register', '/', '/personal-data'].includes(location.pathname);
 
     if (hideSidebar) {
         return null;

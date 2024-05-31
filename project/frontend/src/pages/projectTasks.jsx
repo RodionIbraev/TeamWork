@@ -32,6 +32,7 @@ function ProjectTasks() {
     useEffect(() => {
         const fetchTaskChoices = async () => {
             try {
+                // Запрос на получение нгазваний статусов задач
                 const response = await axios.get('http://127.0.0.1:8000/get-task-choices/', {
                     headers: {
                         'token': sessionStorage.getItem("accessToken"),
@@ -49,11 +50,13 @@ function ProjectTasks() {
         const fetchProjectData = async () => {
             try {
                 const [responseProject, responseEmployees] = await Promise.all([
+                    // Запрос на получение выбранного проекта
                     axios.get(`http://127.0.0.1:8000/project/${projectId}`, {
                         headers: {
                             'token': sessionStorage.getItem("accessToken"),
                         }
                     }),
+                    // Запрос на списка сотрудников
                     axios.get('http://127.0.0.1:8000/get-employees/', {
                         headers: {
                             'token': sessionStorage.getItem("accessToken"),
@@ -73,6 +76,7 @@ function ProjectTasks() {
 
     const handleExportToXLSX = async () => {
         try {
+            // Запрос на экспорт в Excel
             const response = await axios.get(`http://127.0.0.1:8000/project/${projectId}/export/`, {
                 headers: {
                     'token': sessionStorage.getItem("accessToken"),
@@ -80,6 +84,7 @@ function ProjectTasks() {
                 responseType: 'blob'
             });
     
+            // Настройки экспорта
             const projectTitle = project.name.replaceAll(' ', '_');
             const fileName = `${projectTitle}_export.xlsx`; 
 
@@ -99,6 +104,7 @@ function ProjectTasks() {
         }
     };
 
+    // Изменение статуса задачи при перетаскивании
     const handleTaskMove = async (taskId, newStatus) => {
         const updatedTasks = project.tasks.map(task => {
             if (task.id === taskId) {
@@ -113,6 +119,7 @@ function ProjectTasks() {
         });
 
         try {
+            // Запрос на изменение статуса задачи
             await axios.patch(`http://127.0.0.1:8000/task/${taskId}/update/`, { status: newStatus }, {
                 headers: {
                     'token': sessionStorage.getItem("accessToken"),
@@ -122,11 +129,12 @@ function ProjectTasks() {
         }
     };
 
-
+    // Настройка загрузки страницы
     if (!project || statusNames.length === 0) {
         return <div style={{color: 'var(--white-color)', marginTop: '400px'}}>Загрузка...</div>;
     }
 
+    // Форматирование даты
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0');
@@ -135,6 +143,7 @@ function ProjectTasks() {
         return `${day}.${month}.${year}`;
     };
 
+    // Получение имени и фамилии сотрудника
     const getEmployeeName = (executorId) => {
         const executor = employees.find(employee => employee.id === executorId);
         if (executor) {
@@ -145,6 +154,7 @@ function ProjectTasks() {
 
     const getTaskById = async (taskId) => {
         try {
+            // Запрос на получение задачи по ID
             const response = await axios.get(`http://127.0.0.1:8000/task/${taskId}/`, {
                 headers: {
                     'token': sessionStorage.getItem("accessToken"),
@@ -156,32 +166,39 @@ function ProjectTasks() {
         }
     };
 
+    // Функция передачи данных для отображения выбранной задачи
     const handleTaskClick = (taskId) => {
         setSelectedTaskId(taskId);
         getTaskById(taskId);
     };
 
+    // Функция передачи данных для отображения комментариев выбранной задачи
     const handleCommentClick = (taskId) => {
         setSelectedCommentTaskId(taskId);
         setShowCommentsModal(true);
     };
 
+    // Функция открытия модального окна списка сотрудников проекта
     const handleShowEmployeesModal = () => {
         setShowEmployeesList(true);
     };
 
+    // Функция открытия модального окна статистики проекта
     const handleShowGraphs = () => {
         setShowGraphs(true);
     };
 
+    // Функция открытия модального окна докуметов проекта
     const handleShowDocuments = () => {
         setShowDocuments(true);
     };
 
+    // Функция открытия модального окна улалённых задач
     const handleShowDeletedTasks = () => {
         setShowDeletedTasks(true)
     };
 
+    // Функция закрытия модальных окон
     const handleCloseModal = () => {
         setSelectedTaskId(null);
         setSelectedTask(null);
@@ -203,7 +220,7 @@ function ProjectTasks() {
             <div className="task-btns">
                 <button className='task-btn' onClick={handleShowEmployeesModal}>Список сотрудников</button>
                 <button className='task-btn' onClick={handleExportToXLSX}>Экспорт в XLSX</button>
-                <button className='task-btn' onClick={handleShowDeletedTasks}>Удаленные задачи</button>
+                <button className='task-btn' onClick={handleShowDeletedTasks}>Удалённые задачи</button>
                 <button className='task-btn' onClick={handleShowGraphs}>Статистика</button>
                 <button className='task-btn' onClick={handleShowDocuments}>Документы</button>
                 <button className='task-btn' onClick={() => setShowTaskCreate(true)}>Создать задачу</button>

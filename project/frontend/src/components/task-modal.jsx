@@ -17,6 +17,7 @@ const TaskModal = ({ task, formatDate, getEmployeeName, onClose, showEditButton}
     const [executors, setExecutors] = useState([]);
     const [modalClass, setModalClass] = useState('task-modal');
 
+    // Изменение формы
     const handleChange = (e) => {
         const { name, value } = e.target;
         setEditableTask({ ...editableTask, [name]: value });
@@ -26,11 +27,13 @@ const TaskModal = ({ task, formatDate, getEmployeeName, onClose, showEditButton}
         const fetchTaskChoices = async () => {
              try {
                 const [responseTask, responseEmployees] = await Promise.all([
+                // Запрос на получение приоритетов, категорий и статусов задач
                 axios.get('http://127.0.0.1:8000/get-task-choices/', {
                     headers: {
                         'token': sessionStorage.getItem("accessToken"),
                     }
                 }),
+                // Запрос на сотрудников проекта
                 axios.get(`http://127.0.0.1:8000/get-employees/${projectId}`, {
                     headers: {
                         'token': sessionStorage.getItem("accessToken"),
@@ -54,6 +57,7 @@ const TaskModal = ({ task, formatDate, getEmployeeName, onClose, showEditButton}
         e.preventDefault();
 
         try {
+            // Запрос на изменение задачи
             const response = await axios.patch(`http://127.0.0.1:8000/task/${editableTask.task_id}/update/`, editableTask, {
                 headers: {
                     'token': sessionStorage.getItem('accessToken')
@@ -65,7 +69,7 @@ const TaskModal = ({ task, formatDate, getEmployeeName, onClose, showEditButton}
                 reloadPage();
             }, 2000);
         } catch (error) {
-            console.log("Error:", error.response?.data);
+            // Вывод ошибок с сервера
             if (error.response && error.response.data) {
                 if (Array.isArray(error.response.data)) {
                     error.response.data.forEach(msg => {
@@ -80,22 +84,22 @@ const TaskModal = ({ task, formatDate, getEmployeeName, onClose, showEditButton}
 
     const handleDeleteTask = async (e) => {
         e.preventDefault();
-
         try {
+            // Запрос на удаление задачи
             const response = await axios.delete(`http://127.0.0.1:8000/task/${editableTask.task_id}/delete/`, {
                 headers: {
                     'token': sessionStorage.getItem("accessToken"),
                 }
             });
-            toast.success("Задача удалена!");
+            toast.success("Задача добавлена в список удалённых!");
             setTimeout(() => {
                 reloadPage();
             }, 2000);
         } catch (error) {
-            toast.error("Ошибка при удалении задачи");
         }
     };
 
+    // Настройка изменения полей для редактирования задачи
     const renderField = (label, value, name) => {
         if (editableTask) {
             if (name === 'description') {
@@ -151,6 +155,7 @@ const TaskModal = ({ task, formatDate, getEmployeeName, onClose, showEditButton}
         return <span>{value}</span>;
     }
 
+    // Фоматирование даты (дд.мм.гггг чч:мм)
     const formatDateTime = (dateTime) => {
         const formattedDate = new Date(dateTime).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
         const formattedTime = new Date(dateTime).toLocaleString('ru-RU', { hour: '2-digit', minute: '2-digit' });

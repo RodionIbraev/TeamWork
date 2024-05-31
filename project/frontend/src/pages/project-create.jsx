@@ -18,6 +18,7 @@ function ProjectCreate() {
     const [employees, setEmployees] = useState([]);
 
     useEffect(() => {
+        // Запрос на получение списка сотрудников
         const fetchEmployeeData = async () => {
             try {
                 const response = await axios.get('http://127.0.0.1:8000/get-employees/', {
@@ -27,13 +28,13 @@ function ProjectCreate() {
                 });
                 setEmployees(response.data);
             } catch (error) {
-                console.error('Error:', error);
             }
         };
 
         fetchEmployeeData();
     }, []);
 
+    // Изменение формы
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevFormData => ({
@@ -42,6 +43,7 @@ function ProjectCreate() {
         }));
     };
 
+    // Обработка изменения select
     const handleSelectChange = (e) => {
         const selectedOptions = Array.from(e.target.selectedOptions, option => parseInt(option.value, 10));
 
@@ -53,9 +55,11 @@ function ProjectCreate() {
 
     const [isLoading, setIsLoading] = useState(false);
 
+    // Отправка формы на сервер
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Обязщательные поля
         if (!formData.name || !formData.description || formData.employee.length === 0) {
             toast.error("Пожалуйста, заполните все обязательные поля");
             return;
@@ -68,6 +72,7 @@ function ProjectCreate() {
         setIsLoading(true);
 
         try {
+            // Запрос на создание проекта
             const response = await axios.post("http://127.0.0.1:8000/project/create", formData, {
                 headers: {
                     'token': sessionStorage.getItem("accessToken"),
@@ -80,7 +85,7 @@ function ProjectCreate() {
             }, 2000);
 
         } catch (error) {
-
+        // Вывод ошибок с сервера
             if (error.response && error.response.data) {
                 Object.keys(error.response.data).forEach(field => {
                     const errorMessage = error.response.data[field];
@@ -102,6 +107,7 @@ function ProjectCreate() {
                 navigate('/');
             } else {
                 try {
+                    // Запрос на получение профиля пользователя
                     const responseUserProfile = await axios.get('http://127.0.0.1:8000/user-profile/', {
                         headers: {
                             'token': sessionStorage.getItem("accessToken"),
@@ -109,7 +115,6 @@ function ProjectCreate() {
                     });
                     setUserProfile(responseUserProfile.data);
                 } catch (error) {
-                    console.error('Error fetching user profile:', error);
                 }
             }
         };
@@ -117,6 +122,7 @@ function ProjectCreate() {
         checkAuthorization();
     }, [navigate]);
 
+    // Настройка доступа в зависимости от должнсоти
     if (userProfile && userProfile.post !== "Project manager") {
         return <p className='only-for'>Эта страница доступна только менеджерам проектов</p>;
     }

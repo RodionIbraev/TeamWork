@@ -15,7 +15,8 @@ function DeletedTasks({ projectId, onClose, formatDate, getEmployeeName,  }) {
     const reloadPage = () => {
         window.location.reload();
     };
-    
+
+    // Запрос на получение удаленных задач
     useEffect(() => {
         const fetchTasks = async () => {
             try {
@@ -23,9 +24,7 @@ function DeletedTasks({ projectId, onClose, formatDate, getEmployeeName,  }) {
                     headers: {
                         'token': sessionStorage.getItem("accessToken"),
                     }
-                });
-                
-                
+                });         
                 setTasks(response.data);
             } catch (error) {
             }
@@ -34,6 +33,7 @@ function DeletedTasks({ projectId, onClose, formatDate, getEmployeeName,  }) {
         fetchTasks();
     }, [projectId]);
 
+    // Запрос на полное удаление задачи
     const handleDeleteTask = async (taskId) => {
         try {
             const response = await axios.delete(`http://127.0.0.1:8000/task/${taskId}/hard-delete/`, {
@@ -50,6 +50,7 @@ function DeletedTasks({ projectId, onClose, formatDate, getEmployeeName,  }) {
         }
     };
 
+    // Запрос на восстановление задачи
     const handleRestoreTask = async (taskId) => {
         try {
             const response = await axios.patch(`http://127.0.0.1:8000/${taskId}/task/restore/`, "", {
@@ -62,6 +63,9 @@ function DeletedTasks({ projectId, onClose, formatDate, getEmployeeName,  }) {
             setTasks(updatedTasks);
     
             toast.success('Задача восстановлена!');
+            setTimeout(() => {
+                reloadPage();
+            }, 2000);
         } catch (error) {
         }
     };

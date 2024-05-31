@@ -22,6 +22,7 @@ function Projects() {
             navigate('/');
           } else {
             try {
+              // Запрос на получение списка проектов
                 const responseProjects = await axios.get('http://127.0.0.1:8000/projects/', {
                     headers: {
                         'token': sessionStorage.getItem("accessToken"),
@@ -34,6 +35,7 @@ function Projects() {
 
         const fetchEmployees = async () => {
             try {
+              // Запрос на получение списка сотрудников
                 const responseEmployees = await axios.get('http://127.0.0.1:8000/get-employees/', {
                 headers: {
                   'token': sessionStorage.getItem("accessToken"),
@@ -46,6 +48,7 @@ function Projects() {
 
         const fetchUserProfile = async () => {
           try {
+            // Запрос на получение профиля пользователя
               const responseUserProfile = await axios.get('http://127.0.0.1:8000/user-profile/', {
                   headers: {
                       'token': sessionStorage.getItem("accessToken"),
@@ -61,6 +64,7 @@ function Projects() {
         fetchUserProfile();
     }, []);
 
+    // Форматирование даты
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0');
@@ -69,6 +73,7 @@ function Projects() {
         return `${day}.${month}.${year}`;
     };
 
+    // Получение имени и фамилии сотрудника
     const getEmployeeName = (creatorId) => {
       const creator = employees.find(employee => employee.id === creatorId);
       if (creator) {
@@ -90,6 +95,7 @@ function Projects() {
   
   const handleDeleteProject = async () => {
       try {
+        // Запрос на удаление проекта
           await axios.delete(`http://127.0.0.1:8000/project/${selectedProject.id}/delete/`, {
               headers: {
                   'token': sessionStorage.getItem("accessToken"),

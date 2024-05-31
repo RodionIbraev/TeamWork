@@ -1,5 +1,6 @@
 import { useDrop } from 'react-dnd';
 
+// Создание области для перетаскивания задач
 export const StatusItem = ({ status, children }) => {
     const [{ isOver }, drop] = useDrop({
         accept: 'TASKCARD',

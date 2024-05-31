@@ -19,7 +19,6 @@ function UserTasks() {
     const [selectedCommentTaskId, setSelectedCommentTaskId] = useState(null);
     const [showCommentsModal, setShowCommentsModal] = useState(false);
     
-
     useEffect(() => {
         if (!sessionStorage.getItem("accessToken")) {
             navigate('/');
@@ -27,21 +26,25 @@ function UserTasks() {
         const fetchTaskData = async () => {
             try {
                 const [responseStatusNames, responseEmployees, responseUserTasks, responseProjects] = await Promise.all([
+                    // Запрос на получение статусов задач
                     axios.get('http://127.0.0.1:8000/get-task-choices/', {
                         headers: {
                             'token': sessionStorage.getItem("accessToken"),
                         }
                     }),
+                    // Запрос на получение списка сотрудников
                     axios.get('http://127.0.0.1:8000/get-employees/', {
                         headers: {
                             'token': sessionStorage.getItem("accessToken"),
                         }
                     }),
+                    // Запрос на получение задач пользователя
                     axios.get('http://127.0.0.1:8000/user/tasks/', {
                         headers: {
                             'token': sessionStorage.getItem("accessToken"),
                         }
                     }),
+                    // Запрос на получение списка проектов
                     axios.get('http://127.0.0.1:8000/projects/', {
                         headers: {
                             'token': sessionStorage.getItem("accessToken"),
@@ -60,6 +63,7 @@ function UserTasks() {
         fetchTaskData();
     }}, []);
 
+    // Настройка изменения статуса задачи при перетаскивании
     const handleTaskMove = async (taskId, newStatus) => {
         const updatedUserTasks = userTasks.map(task => {
             if (task.id === taskId) {
@@ -70,6 +74,7 @@ function UserTasks() {
         setUserTasks(updatedUserTasks);
 
         try {
+            // Запрос изменения статуса задачи
             await axios.patch(`http://127.0.0.1:8000/task/${taskId}/update/`, { status: newStatus }, {
                 headers: {
                     'token': sessionStorage.getItem("accessToken"),
@@ -79,6 +84,7 @@ function UserTasks() {
         }
     };
 
+    // Форматирование даты
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0');
@@ -87,21 +93,24 @@ function UserTasks() {
         return `${day}.${month}.${year}`;
     };
 
+    // Получение имени и фамилии сотрудников
     const getEmployeeName = (executorId) => {
         const executor = employees.find(employee => employee.id === executorId);
         if (executor) {
             return `${executor.first_name} ${executor.last_name}`;
         }
-        return 'Unknown';
+        return 'Неизвестный сотрудник';
     };
 
+    // Получение название проекта
     const getProjectName = (projectId) => {
         const project = projects.find(project => project.id === projectId);
-        return project ? project.name : 'Unknown';
+        return project ? project.name : 'Неизвестный проект';
     };
 
     const getTaskById = async (taskId) => {
         try {
+            // Запрос на получение задачи по ID
             const response = await axios.get(`http://127.0.0.1:8000/task/${taskId}/`, {
                 headers: {
                     'token': sessionStorage.getItem("accessToken"),

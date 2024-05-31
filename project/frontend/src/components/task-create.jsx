@@ -31,6 +31,7 @@ const TaskCreate = ({onClose})=> {
                 navigate('/login');
             } else {
                 try {
+                    // Запрос получение приоритетов и статусов задач
                     const response = await axios.get('http://127.0.0.1:8000/get-task-choices/', {
                         headers: {
                             'token': sessionStorage.getItem("accessToken"),
@@ -50,6 +51,7 @@ const TaskCreate = ({onClose})=> {
     useEffect(() => {
         const fetchExecutors = async () => {
             try {
+                // Запрос на получение сотрудников проекта
                 const response = await axios.get(`http://127.0.0.1:8000/get-employees/${projectId}`, {
                     headers: {
                         'token': sessionStorage.getItem("accessToken"),
@@ -64,6 +66,7 @@ const TaskCreate = ({onClose})=> {
         fetchExecutors();
     }, []);
 
+    // Изменение формы
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevFormData => ({
@@ -76,9 +79,11 @@ const TaskCreate = ({onClose})=> {
         window.location.reload();
     };
 
+    // Отправка формы на сервер
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Обязатльные поля
         if (!formData.name || !formData.description|| !formData.deadline|| !formData.priority || !formData.category || !formData.executor) {
             toast.error("Пожалуйста, заполните все обязательные поля");
             return;
@@ -86,6 +91,7 @@ const TaskCreate = ({onClose})=> {
 
 
         try {
+            // Запрос на создание задачи
             const response = await axios.post(`http://127.0.0.1:8000/project/${formData.project_id}/task/create/`, formData, {
                 headers: {
                     'token': sessionStorage.getItem("accessToken"),
@@ -98,6 +104,7 @@ const TaskCreate = ({onClose})=> {
             }, 2000);
             
         } catch (error) {
+            // Вывод ошибок с сервера
             if (error.response && error.response.data) {
                 Object.keys(error.response.data).forEach(field => {
                     const errorMessage = error.response.data[field];
